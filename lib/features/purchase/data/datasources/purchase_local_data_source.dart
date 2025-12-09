@@ -1,0 +1,456 @@
+import 'dart:convert';
+import 'package:khatoon_container/features/purchase/data/models/delivery_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/payment_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/purchase_item_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:khatoon_container/core/errors/exceptions.dart';
+import 'package:khatoon_container/features/purchase/data/models/purchase_invoice_model.dart';
+
+abstract class IPurchaseLocalDataSource {
+  // Purchase Invoices - CREATE & READ operations
+  Future<void> createInvoice(PurchaseInvoiceModel invoice);
+
+  Future<List<PurchaseInvoiceModel>> getCachedInvoices();
+
+  Future<PurchaseInvoiceModel?> getInvoiceById(String id);
+
+  Future<void> updateInvoice(PurchaseInvoiceModel invoice);
+
+  Future<void> removeInvoice(String id);
+
+  Future<void> cacheInvoices(List<PurchaseInvoiceModel> invoices);
+
+  Future<void> clearAllInvoices();
+
+  // Payments - CREATE & READ operations
+  Future<void> createPayment(String invoiceId, PaymentModel payment);
+
+  Future<void> cachePayment(String invoiceId, PaymentModel payment);
+
+  Future<List<PaymentModel>> getCachedPayments(String invoiceId);
+
+  Future<PaymentModel?> getPaymentById(String paymentId);
+
+  Future<void> updatePayment(PaymentModel payment);
+
+  Future<void> removePayment(String paymentId);
+
+  Future<void> clearPayments(String invoiceId);
+
+  // Deliveries - CREATE & READ operations
+  Future<void> createDelivery(String invoiceId, DeliveryModel delivery);
+
+  Future<void> cacheDelivery(String invoiceId, DeliveryModel delivery);
+
+  Future<List<DeliveryModel>> getCachedDeliveries(String invoiceId);
+
+  Future<DeliveryModel?> getDeliveryById(String deliveryId);
+
+  Future<void> updateDelivery(DeliveryModel delivery);
+
+  Future<void> removeDelivery(String deliveryId);
+
+  Future<void> clearDeliveries(String invoiceId);
+}
+
+class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
+  static const String _invoicesKey = 'cached_invoices';
+  static const String _paymentsKeyPrefix = 'payments_';
+  static const String _deliveriesKeyPrefix = 'deliveries_';
+
+  final SharedPreferences sharedPreferences;
+
+  PurchaseLocalDataSource({required this.sharedPreferences});
+
+  // ========== Purchase Invoices Methods ==========
+
+  @override
+  Future<void> createInvoice(PurchaseInvoiceModel invoice) async {
+    try {
+      final invoices = await getCachedInvoices();
+      invoices.add(invoice);
+      await _saveInvoices(invoices);
+    } catch (e) {
+      throw CacheException(message: 'خطا در ایجاد فاکتور در کش محلی');
+    }
+  }
+
+  @override
+  Future<List<PurchaseInvoiceModel>> getCachedInvoices() async {
+    try {
+      final jsonString = sharedPreferences.getString(_invoicesKey);
+      if (jsonString == null) return [];
+
+      final List<dynamic> jsonList = json.decode(jsonString);
+      return jsonList
+          .map((json) => PurchaseInvoiceModel.fromJson(json))
+          .toList();
+    } catch (e) {
+      throw CacheException(message: 'خطا در خواندن فاکتورها از کش محلی');
+    }
+  }
+
+  @override
+  Future<PurchaseInvoiceModel?> getInvoiceById(String id) async {
+    try {
+      final invoices = await getCachedInvoices();
+      return invoices.firstWhere((invoice) => invoice.id == id);
+    } catch (e) {
+      throw CacheException(message: 'خطا در پیدا کردن فاکتور');
+    }
+  }
+
+  @override
+  Future<void> updateInvoice(PurchaseInvoiceModel updatedInvoice) async {
+    try {
+      final invoices = await getCachedInvoices();
+      final index = invoices.indexWhere(
+        (invoice) => invoice.id == updatedInvoice.id,
+      );
+
+      if (index != -1) {
+        invoices[index] = updatedInvoice;
+        await _saveInvoices(invoices);
+      }
+    } catch (e) {
+      throw CacheException(message: 'خطا در به‌روزرسانی فاکتور در کش محلی');
+    }
+  }
+
+  @override
+  Future<void> removeInvoice(String id) async {
+    try {
+      final invoices = await getCachedInvoices();
+      invoices.removeWhere((invoice) => invoice.id == id);
+      await _saveInvoices(invoices);
+    } catch (e) {
+      throw CacheException(message: 'خطا در حذف فاکتور از کش محلی');
+    }
+  }
+
+  @override
+  Future<void> cacheInvoices(List<PurchaseInvoiceModel> invoices) async {
+    try {
+      await _saveInvoices(invoices);
+    } catch (e) {
+      throw CacheException(message: 'خطا در ذخیره فاکتورها در کش محلی');
+    }
+  }
+
+  @override
+  Future<void> clearAllInvoices() async {
+    try {
+      await sharedPreferences.remove(_invoicesKey);
+    } catch (e) {
+      throw CacheException(message: 'خطا در پاک کردن همه فاکتورها');
+    }
+  }
+
+  Future<void> _saveInvoices(List<PurchaseInvoiceModel> invoices) async {
+    final jsonList = invoices.map((invoice) => invoice.toJson()).toList();
+    final jsonString = json.encode(jsonList);
+    await sharedPreferences.setString(_invoicesKey, jsonString);
+  }
+
+  // ========== Payments Methods ==========
+
+  @override
+  Future<void> createPayment(String invoiceId, PaymentModel payment) async {
+    try {
+      final payments = await getCachedPayments(invoiceId);
+      payments.add(payment);
+      await _savePayments(invoiceId, payments);
+    } catch (e) {
+      throw CacheException(message: 'خطا در ایجاد پرداخت در کش محلی');
+    }
+  }
+
+  @override
+  Future<void> cachePayment(String invoiceId, PaymentModel payment) async {
+    await createPayment(invoiceId, payment);
+  }
+
+  @override
+  Future<List<PaymentModel>> getCachedPayments(String invoiceId) async {
+    try {
+      final key = '${_paymentsKeyPrefix}$invoiceId';
+      final jsonString = sharedPreferences.getString(key);
+      if (jsonString == null) return [];
+
+      final List<dynamic> jsonList = json.decode(jsonString);
+      return jsonList.map((json) => PaymentModel.fromJson(json)).toList();
+    } catch (e) {
+      throw CacheException(message: 'خطا در خواندن پرداخت‌ها از کش محلی');
+    }
+  }
+
+  @override
+  Future<PaymentModel?> getPaymentById(String paymentId) async {
+    try {
+      final invoices = await getCachedInvoices();
+
+      for (final invoice in invoices) {
+          PaymentModel payment = invoice.payments.firstWhere(
+              (p) => p.id == paymentId,
+        ) as PaymentModel;
+        if (payment != null) return payment;
+        else return null;
+      }
+      return null;
+    } catch (e) {
+      throw CacheException(message: 'خطا در پیدا کردن پرداخت');
+    }
+  }
+
+  @override
+  Future<void> updatePayment(PaymentModel updatedPayment) async {
+    try {
+      // Get all invoices
+      final invoices = await getCachedInvoices();
+      var found = false;
+
+      for (final invoice in invoices) {
+        final index = invoice.payments.indexWhere(
+          (p) => p.id == updatedPayment.id,
+        );
+        if (index != -1) {
+          // Create a new list with updated payment
+          final updatedPayments = List<PaymentModel>.from(invoice.payments);
+          updatedPayments[index] = updatedPayment;
+
+          // Update invoice with new payments list
+          final updatedInvoice = PurchaseInvoiceModel(
+            id: invoice.id,
+            sellerId: invoice.sellerId,
+            sellerName: invoice.sellerName,
+            notes: invoice.notes,
+            date: invoice.date,
+            status: invoice.status,
+            totalAmount: invoice.totalAmount,
+            paidAmount: invoice.paidAmount,
+            paymentStatus: invoice.paymentStatus,
+            deliveryStatus: invoice.deliveryStatus,
+            isSettled: invoice.isSettled,
+            deliveries: invoice.deliveries as List<DeliveryModel>,
+            items: invoice.items as  List<PurchaseItemModel>,
+            payments: updatedPayments,
+          );
+
+          await updateInvoice(updatedInvoice);
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        throw CacheException(message: 'پرداخت مورد نظر پیدا نشد');
+      }
+    } catch (e) {
+      if (e is CacheException) rethrow;
+      throw CacheException(message: 'خطا در به‌روزرسانی پرداخت در کش محلی');
+    }
+  }
+
+  @override
+  Future<void> removePayment(String paymentId) async {
+    try {
+      // Get all invoices
+      final invoices = await getCachedInvoices();
+      var found = false;
+
+      for (final invoice in invoices) {
+        final paymentIndex = invoice.payments.indexWhere(
+          (p) => p.id == paymentId,
+        );
+        if (paymentIndex != -1) {
+          // Create a new list without the payment
+          final updatedPayments = List<PaymentModel>.from(invoice.payments);
+          updatedPayments.removeAt(paymentIndex);
+
+          // Update invoice with new payments list
+          final updatedInvoice = PurchaseInvoiceModel(
+            id: invoice.id,
+            sellerId: invoice.sellerId,
+            sellerName: invoice.sellerName,
+            notes: invoice.notes,
+            date: invoice.date,
+            status: invoice.status,
+            totalAmount: invoice.totalAmount,
+            paidAmount: invoice.paidAmount,
+            paymentStatus: invoice.paymentStatus,
+            deliveryStatus: invoice.deliveryStatus,
+            isSettled: invoice.isSettled,
+            deliveries: invoice.deliveries as List<DeliveryModel>,
+            items: invoice.items as List<PurchaseItemModel>,
+            payments: updatedPayments,
+          );
+
+          await updateInvoice(updatedInvoice);
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        throw CacheException(message: 'پرداخت مورد نظر پیدا نشد');
+      }
+    } catch (e) {
+      if (e is CacheException) rethrow;
+      throw CacheException(message: 'خطا در حذف پرداخت از کش محلی');
+    }
+  }
+
+  @override
+  Future<void> clearPayments(String invoiceId) async {
+    try {
+      final key = '${_paymentsKeyPrefix}$invoiceId';
+      await sharedPreferences.remove(key);
+    } catch (e) {
+      throw CacheException(message: 'خطا در پاک کردن پرداخت‌ها');
+    }
+  }
+
+  Future<void> _savePayments(
+    String invoiceId,
+    List<PaymentModel> payments,
+  ) async {
+    final key = '${_paymentsKeyPrefix}$invoiceId';
+    final jsonList = payments.map((payment) => payment.toJson()).toList();
+    final jsonString = json.encode(jsonList);
+    await sharedPreferences.setString(key, jsonString);
+  }
+
+  // ========== Deliveries Methods ==========
+
+  @override
+  Future<void> createDelivery(String invoiceId, DeliveryModel delivery) async {
+    try {
+      final deliveries = await getCachedDeliveries(invoiceId);
+      deliveries.add(delivery);
+      await _saveDeliveries(invoiceId, deliveries);
+    } catch (e) {
+      throw CacheException(message: 'خطا در ایجاد تحویل در کش محلی');
+    }
+  }
+
+  @override
+  Future<void> cacheDelivery(String invoiceId, DeliveryModel delivery) async {
+    await createDelivery(invoiceId, delivery);
+  }
+
+  @override
+  Future<List<DeliveryModel>> getCachedDeliveries(String invoiceId) async {
+    try {
+      final key = '${_deliveriesKeyPrefix}$invoiceId';
+      final jsonString = sharedPreferences.getString(key);
+      if (jsonString == null) return [];
+
+      final List<dynamic> jsonList = json.decode(jsonString);
+      return jsonList.map((json) => DeliveryModel.fromJson(json)).toList();
+    } catch (e) {
+      throw CacheException(message: 'خطا در خواندن تحویل‌ها از کش محلی');
+    }
+  }
+
+  @override
+  Future<DeliveryModel?> getDeliveryById(String deliveryId) async {
+    try {
+      final invoices = await getCachedInvoices();
+
+      for (final invoice in invoices) {
+        for (final delivery in invoice.deliveries) {
+          if (delivery.id == deliveryId) {
+            return delivery as DeliveryModel;
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      throw CacheException(message: 'خطا در پیدا کردن تحویل');
+    }
+  }
+
+  @override
+  Future<void> updateDelivery(DeliveryModel updatedDelivery) async {
+    try {
+      // This would require similar logic to updatePayment
+      // For simplicity, we'll remove and re-add
+      await removeDelivery(updatedDelivery.id);
+
+      // Find which invoice this delivery belongs to
+      final invoices = await getCachedInvoices();
+      for (final invoice in invoices) {
+        if (invoice.deliveries.any((d) => d.id == updatedDelivery.id)) {
+          await createDelivery(invoice.id, updatedDelivery);
+          break;
+        }
+      }
+    } catch (e) {
+      throw CacheException(message: 'خطا در به‌روزرسانی تحویل در کش محلی');
+    }
+  }
+
+  @override
+  Future<void> removeDelivery(String deliveryId) async {
+    try {
+      // Similar to removePayment logic
+      final invoices = await getCachedInvoices();
+
+      for (final invoice in invoices) {
+        final deliveryIndex = invoice.deliveries.indexWhere(
+          (d) => d.id == deliveryId,
+        );
+        if (deliveryIndex != -1) {
+          // Create a new list without the delivery
+          final updatedDeliveries = List<DeliveryModel>.from(
+            invoice.deliveries,
+          );
+          updatedDeliveries.removeAt(deliveryIndex);
+
+          // Update invoice
+          final updatedInvoice = PurchaseInvoiceModel(
+            id: invoice.id,
+            sellerId: invoice.sellerId,
+            sellerName: invoice.sellerName,
+            notes: invoice.notes,
+            date: invoice.date,
+            status: invoice.status,
+            totalAmount: invoice.totalAmount,
+            paidAmount: invoice.paidAmount,
+            paymentStatus: invoice.paymentStatus,
+            deliveryStatus: invoice.deliveryStatus,
+            isSettled: invoice.isSettled,
+            deliveries: updatedDeliveries,
+            items: invoice.items as List<PurchaseItemModel>,
+            payments: invoice.payments  as List<PaymentModel>,
+          );
+
+          await updateInvoice(updatedInvoice);
+          break;
+        }
+      }
+    } catch (e) {
+      throw CacheException(message: 'خطا در حذف تحویل از کش محلی');
+    }
+  }
+
+  @override
+  Future<void> clearDeliveries(String invoiceId) async {
+    try {
+      final key = '${_deliveriesKeyPrefix}$invoiceId';
+      await sharedPreferences.remove(key);
+    } catch (e) {
+      throw CacheException(message: 'خطا در پاک کردن تحویل‌ها');
+    }
+  }
+
+  Future<void> _saveDeliveries(
+    String invoiceId,
+    List<DeliveryModel> deliveries,
+  ) async {
+    final key = '${_deliveriesKeyPrefix}$invoiceId';
+    final jsonList = deliveries.map((delivery) => delivery.toJson()).toList();
+    final jsonString = json.encode(jsonList);
+    await sharedPreferences.setString(key, jsonString);
+  }
+}
