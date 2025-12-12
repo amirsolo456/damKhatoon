@@ -47,15 +47,15 @@ linter:
     - prefer_final_fields
     - prefer_final_locals
     - avoid_bool_literals_in_conditional_expressions
-    - annotate_redeclares
+#    - annotate_redeclares
     - annotate_overrides
     - always_specify_types
-    - omit_local_variable_types
+#    - omit_local_variable_types
     - avoid_catching_errors
     - avoid_escaping_inner_quotes
-    - avoid_types_on_closure_parameters
-    - avoid_null_checks_in_equality_operators
-    - avoid_return_types_on_setters
+#    - avoid_types_on_closure_parameters
+#    - avoid_null_checks_in_equality_operators
+#    - avoid_return_types_on_setters
     - avoid_redundant_argument_values
 
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule

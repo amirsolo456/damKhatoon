@@ -5,7 +5,7 @@ import 'package:khatoon_container/features/purchase/domain/entities/payment.dart
 import 'package:khatoon_container/features/purchase/domain/entities/purchase_item.dart';
 
 class PurchaseInvoice extends Equatable {
-  final String id;
+  final int id;
   final String sellerId;
   final String sellerName;
   final DateTime date;
@@ -62,7 +62,7 @@ class PurchaseInvoice extends Equatable {
   bool get isPaidInFull => remainingAmount <= 0;
 
   PurchaseInvoice copyWith({
-    String? id,
+    int? id,
     String? sellerId,
     DateTime? date,
     double? totalAmount,

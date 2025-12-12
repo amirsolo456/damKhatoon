@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
+import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
+import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_state.dart';
 
 
 
@@ -17,13 +19,13 @@ class PurchaseListView extends StatelessWidget {
           );
         }
 
-        if (state is PurchaseError) {
+        if (state is PurchaseErrorState) {
           return Center(
             child: Text(state.message),
           );
         }
 
-        if (state is PurchaseLoaded) {
+        if (state is PurchasesLoadedState) {
           final invoices = state.invoices;
 
           if (invoices.isEmpty) {

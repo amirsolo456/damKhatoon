@@ -1,7 +1,7 @@
 // features/purchase/data/datasources/purchase_local_data_source.dart
-import 'package:khatoon_container/features/purchase/data/models/delivery_model.dart';
-import 'package:khatoon_container/features/purchase/data/models/payment_model.dart';
-import 'package:khatoon_container/features/purchase/data/models/purchase_invoice_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/delivery/delivery_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/payment/payment_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/purchase_invoice/purchase_invoice_model.dart';
 
 
 

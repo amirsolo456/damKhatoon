@@ -2,7 +2,7 @@
 import 'package:equatable/equatable.dart';
 
 class PurchaseItem extends Equatable {
-  final String id;
+  final int id;
   final String name;
   final int quantity;
   final double price;

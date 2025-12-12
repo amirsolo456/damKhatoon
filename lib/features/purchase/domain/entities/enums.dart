@@ -30,6 +30,7 @@ class UserRankHelper {
     UserRank.user: 6,
   };
 
+
   static const Map<UserRank, String> _persianNames = {
     UserRank.accountant: 'حسابدار',
     UserRank.support: 'پشتیبان',

@@ -4,8 +4,8 @@ import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/purchase_item.dart';
 
 class Payment extends Equatable {
-  final String id;
-  final String sellerId;
+  final int id;
+  final int sellerId;
   final String sellerName;
   final String notes;
   final DateTime date;

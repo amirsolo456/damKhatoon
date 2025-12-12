@@ -1,27 +1,38 @@
-// features/purchase/data/models/purchase_invoice_model.dart
+import 'package:json_annotation/json_annotation.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
+import '../../../domain/entities/purchase_invoice.dart';
+import '../payment/payment_model.dart';
+import '../delivery/delivery_model.dart';
+import '../purchase_item/purchase_item_model.dart';
 
-import '../../domain/entities/purchase_invoice.dart';
-import 'payment_model.dart';
-import 'delivery_model.dart';
-import 'purchase_item_model.dart';
+part 'purchase_invoice_model.g.dart';
 
+@JsonSerializable(fieldRename: FieldRename.pascal)
 class PurchaseInvoiceModel extends PurchaseInvoice {
+  final List<DeliveryModel> deliveries;
+  final List<PurchaseItemModel> items;
+  final List<PaymentModel> payments;
+  final String sellerId;
+  final String sellerName;
+  final String notes;
+  final double totalAmount;
+  final double paidAmount;
+
   const PurchaseInvoiceModel({
-    required String id,
-    required String sellerId,
-    required String sellerName,
-    required String notes,
-    required DateTime date,
+    required int id,
+    @JsonKey(toJson: _toJson, fromJson: _fromJson) required DateTime date,
     required int status,
-    required double totalAmount,
-    required double paidAmount,
-    required PaymentStatus paymentStatus,
-    required DeliveryStatus deliveryStatus,
+    @JsonEnum(alwaysCreate: true) required PaymentStatus paymentStatus,
+    @JsonEnum(alwaysCreate: true) required DeliveryStatus deliveryStatus,
     required bool isSettled,
-    required List<DeliveryModel> deliveries,
-    required List<PurchaseItemModel> items,
-    required List<PaymentModel> payments,
+    required this.deliveries,
+    required this.items,
+    required this.payments,
+    required this.sellerId,
+    required this.sellerName,
+    required this.notes,
+    required this.totalAmount,
+    required this.paidAmount,
   }) : super(
          id: id,
          sellerId: sellerId,
@@ -38,6 +49,17 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
          items: items,
          payments: payments,
        );
+
+  static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
+
+  static DateTime _fromJson(dynamic value) {
+    if (value is int) {
+      return DateTime.fromMillisecondsSinceEpoch(value);
+    } else if (value is String) {
+      return DateTime.parse(value);
+    }
+    return DateTime.now();
+  }
 
   // تبدیل از JSON به مدل
   factory PurchaseInvoiceModel.fromJson(Map<String, dynamic> json) {
@@ -98,7 +120,7 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
     }
 
     return PurchaseInvoiceModel(
-      id: json['id'] as String,
+      id: json['id'] as int,
       sellerId: json['sellerId'] as String,
       sellerName: json['SellerName'] ?? '',
       notes: json['notes'] ?? '',

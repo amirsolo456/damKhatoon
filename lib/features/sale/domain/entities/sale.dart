@@ -1,4 +1,5 @@
 // مدل جامع‌تر
+import 'package:json_annotation/json_annotation.dart';
 import 'package:khatoon_container/features/purchase/data/datasources/purchase_remote_data_source.dart';
 import 'package:khatoon_container/features/purchase/data/repositories/purchase_repository_impl.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/delivery.dart';
@@ -6,6 +7,9 @@ import 'package:khatoon_container/features/purchase/domain/entities/order.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/payment.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/purchase_invoice.dart';
 
+part 'sale.g.dart';
+
+@JsonSerializable()
 class Sale {
   final Order purchaseOrder;
   final List<PurchaseInvoice> invoices;
@@ -19,61 +23,18 @@ class Sale {
     required this.payments,
   });
 
-  // محاسبه مانده پرداخت
-  double get remainingBalance {
-    final totalInvoiced = invoices.fold(
-      0.0,
-      (sum, invoice) => sum + invoice.totalAmount,
-    );
-    final totalPaid = payments.fold(
-      0.0,
-      (sum, payment) => sum + payment.totalAmount,
-    );
-    return totalInvoiced - totalPaid;
-  }
-
-  // وضعیت کلی
-  // PurchaseStatus get overallStatus {
-  //   if (deliveries.isEmpty) return PurchaseStatus.pending;
-  //   if (remainingBalance > 0) return PurchaseStatus.partiallyPaid;
-  //   return PurchaseStatus.completed;
+  // static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
+  //
+  // static DateTime _fromJson(dynamic value) {
+  //   if (value is int) {
+  //     return DateTime.fromMillisecondsSinceEpoch(value);
+  //   } else if (value is String) {
+  //     return DateTime.parse(value);
+  //   }
+  //   return DateTime.now();
   // }
-}
 
-// UseCase برای گرفتن تمام اطلاعات یک Purchase
-class GetPurchaseDetailsUseCase {
-  final PurchaseRemoteDataSource repository;
+  factory Sale.fromJson(Map<String, dynamic> json) => _$SaleFromJson(json);
 
-  Future<Sale> execute(String purchaseId) async {
-    final purchase = await repository.getPurchaseById(purchaseId);
-    final invoices = await repository.getInvoicesByPurchaseId(purchaseId);
-    final deliveries = await repository.getDeliveriesByPurchaseId(purchaseId);
-    final payments = await repository.getPaymentsByPurchaseId(purchaseId);
-    final orders = await repository.get(purchaseId);
-
-    return Sale(
-      purchaseOrder: orders,
-      invoices: invoices,
-      deliveries: deliveries,
-      payments: payments,
-    );
-  }
-}
-
-// UseCase برای گرفتن پرداخت‌های یک Invoice خاص
-class GetPaymentsByInvoiceUseCase {
-  final PurchaseRepository repository;
-
-  Future<List<Payment>> execute(String invoiceId) async {
-    return await repository.getPaymentsByInvoiceId(invoiceId);
-  }
-}
-
-// UseCase برای گرفتن Invoiceهای یک Purchase
-class GetInvoicesByPurchaseUseCase {
-  final PurchaseRepository repository;
-
-  Future<List<Invoice>> execute(String purchaseId) async {
-    return await repository.getInvoicesByPurchaseId(purchaseId);
-  }
+  Map<String, dynamic> toJson() => _$SaleToJson(this);
 }

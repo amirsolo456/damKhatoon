@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:khatoon_container/features/purchase/data/models/delivery_model.dart';
-import 'package:khatoon_container/features/purchase/data/models/payment_model.dart';
-import 'package:khatoon_container/features/purchase/data/models/purchase_item_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/delivery/delivery_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/payment/payment_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/purchase_item/purchase_item_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khatoon_container/core/errors/exceptions.dart';
-import 'package:khatoon_container/features/purchase/data/models/purchase_invoice_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/purchase_invoice/purchase_invoice_model.dart';
 
 abstract class IPurchaseLocalDataSource {
   // Purchase Invoices - CREATE & READ operations
@@ -12,45 +12,45 @@ abstract class IPurchaseLocalDataSource {
 
   Future<List<PurchaseInvoiceModel>> getCachedInvoices();
 
-  Future<PurchaseInvoiceModel?> getInvoiceById(String id);
+  Future<PurchaseInvoiceModel?> getInvoiceById(int id);
 
   Future<void> updateInvoice(PurchaseInvoiceModel invoice);
 
-  Future<void> removeInvoice(String id);
+  Future<void> removeInvoice(int id);
 
   Future<void> cacheInvoices(List<PurchaseInvoiceModel> invoices);
 
   Future<void> clearAllInvoices();
 
   // Payments - CREATE & READ operations
-  Future<void> createPayment(String invoiceId, PaymentModel payment);
+  Future<void> createPayment(int invoiceId, PaymentModel payment);
 
-  Future<void> cachePayment(String invoiceId, PaymentModel payment);
+  Future<void> cachePayment(int invoiceId, PaymentModel payment);
 
-  Future<List<PaymentModel>> getCachedPayments(String invoiceId);
+  Future<List<PaymentModel>> getCachedPayments(int invoiceId);
 
-  Future<PaymentModel?> getPaymentById(String paymentId);
+  Future<PaymentModel?> getPaymentById(int paymentId);
 
   Future<void> updatePayment(PaymentModel payment);
 
-  Future<void> removePayment(String paymentId);
+  Future<void> removePayment(int paymentId);
 
-  Future<void> clearPayments(String invoiceId);
+  Future<void> clearPayments(int invoiceId);
 
   // Deliveries - CREATE & READ operations
-  Future<void> createDelivery(String invoiceId, DeliveryModel delivery);
+  Future<void> createDelivery(int invoiceId, DeliveryModel delivery);
 
-  Future<void> cacheDelivery(String invoiceId, DeliveryModel delivery);
+  Future<void> cacheDelivery(int invoiceId, DeliveryModel delivery);
 
-  Future<List<DeliveryModel>> getCachedDeliveries(String invoiceId);
+  Future<List<DeliveryModel>> getCachedDeliveries(int invoiceId);
 
-  Future<DeliveryModel?> getDeliveryById(String deliveryId);
+  Future<DeliveryModel?> getDeliveryById(int deliveryId);
 
   Future<void> updateDelivery(DeliveryModel delivery);
 
-  Future<void> removeDelivery(String deliveryId);
+  Future<void> removeDelivery(int deliveryId);
 
-  Future<void> clearDeliveries(String invoiceId);
+  Future<void> clearDeliveries(int invoiceId);
 }
 
 class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
@@ -91,7 +91,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<PurchaseInvoiceModel?> getInvoiceById(String id) async {
+  Future<PurchaseInvoiceModel?> getInvoiceById(int id) async {
     try {
       final invoices = await getCachedInvoices();
       return invoices.firstWhere((invoice) => invoice.id == id);
@@ -118,7 +118,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<void> removeInvoice(String id) async {
+  Future<void> removeInvoice(int id) async {
     try {
       final invoices = await getCachedInvoices();
       invoices.removeWhere((invoice) => invoice.id == id);
@@ -155,7 +155,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   // ========== Payments Methods ==========
 
   @override
-  Future<void> createPayment(String invoiceId, PaymentModel payment) async {
+  Future<void> createPayment(int invoiceId, PaymentModel payment) async {
     try {
       final payments = await getCachedPayments(invoiceId);
       payments.add(payment);
@@ -166,12 +166,12 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<void> cachePayment(String invoiceId, PaymentModel payment) async {
+  Future<void> cachePayment(int invoiceId, PaymentModel payment) async {
     await createPayment(invoiceId, payment);
   }
 
   @override
-  Future<List<PaymentModel>> getCachedPayments(String invoiceId) async {
+  Future<List<PaymentModel>> getCachedPayments(int invoiceId) async {
     try {
       final key = '${_paymentsKeyPrefix}$invoiceId';
       final jsonString = sharedPreferences.getString(key);
@@ -185,7 +185,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<PaymentModel?> getPaymentById(String paymentId) async {
+  Future<PaymentModel?> getPaymentById(int paymentId) async {
     try {
       final invoices = await getCachedInvoices();
 
@@ -252,7 +252,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<void> removePayment(String paymentId) async {
+  Future<void> removePayment(int paymentId) async {
     try {
       // Get all invoices
       final invoices = await getCachedInvoices();
@@ -301,7 +301,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<void> clearPayments(String invoiceId) async {
+  Future<void> clearPayments(int invoiceId) async {
     try {
       final key = '${_paymentsKeyPrefix}$invoiceId';
       await sharedPreferences.remove(key);
@@ -311,7 +311,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   Future<void> _savePayments(
-    String invoiceId,
+      int invoiceId,
     List<PaymentModel> payments,
   ) async {
     final key = '${_paymentsKeyPrefix}$invoiceId';
@@ -323,7 +323,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   // ========== Deliveries Methods ==========
 
   @override
-  Future<void> createDelivery(String invoiceId, DeliveryModel delivery) async {
+  Future<void> createDelivery(int invoiceId, DeliveryModel delivery) async {
     try {
       final deliveries = await getCachedDeliveries(invoiceId);
       deliveries.add(delivery);
@@ -334,12 +334,12 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<void> cacheDelivery(String invoiceId, DeliveryModel delivery) async {
+  Future<void> cacheDelivery(int invoiceId, DeliveryModel delivery) async {
     await createDelivery(invoiceId, delivery);
   }
 
   @override
-  Future<List<DeliveryModel>> getCachedDeliveries(String invoiceId) async {
+  Future<List<DeliveryModel>> getCachedDeliveries(int invoiceId) async {
     try {
       final key = '${_deliveriesKeyPrefix}$invoiceId';
       final jsonString = sharedPreferences.getString(key);
@@ -353,7 +353,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<DeliveryModel?> getDeliveryById(String deliveryId) async {
+  Future<DeliveryModel?> getDeliveryById(int deliveryId) async {
     try {
       final invoices = await getCachedInvoices();
 
@@ -391,7 +391,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<void> removeDelivery(String deliveryId) async {
+  Future<void> removeDelivery(int deliveryId) async {
     try {
       // Similar to removePayment logic
       final invoices = await getCachedInvoices();
@@ -435,7 +435,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   @override
-  Future<void> clearDeliveries(String invoiceId) async {
+  Future<void> clearDeliveries(int invoiceId) async {
     try {
       final key = '${_deliveriesKeyPrefix}$invoiceId';
       await sharedPreferences.remove(key);
@@ -445,7 +445,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   Future<void> _saveDeliveries(
-    String invoiceId,
+      int invoiceId,
     List<DeliveryModel> deliveries,
   ) async {
     final key = '${_deliveriesKeyPrefix}$invoiceId';

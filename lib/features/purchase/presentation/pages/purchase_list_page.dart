@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
+// purchase_list_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:khatoon_container/features/purchase/domain/usecases/create_purchase_usecase.dart';
-import 'package:khatoon_container/features/purchase/domain/usecases/get_purchase_usecase.dart';
-import 'package:khatoon_container/features/purchase/domain/usecases/update_purchase_usecase.dart';
+import 'package:get_it/get_it.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
+import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
 import 'package:khatoon_container/features/purchase/presentation/widgets/purchase_list_view.dart';
 
 class PurchaseListPage extends StatelessWidget {
@@ -12,25 +11,19 @@ class PurchaseListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // استفاده از BlocProvider برای ارائه BLoC به زیردرخت
+    // ابتدا مطمئن شویم GetIt initialize شده است
     return BlocProvider(
       create: (context) {
-        // اینجا باید use caseها را از DI container بگیرید
-        // فعلاً با ساختار قبلی می‌توانید از context.read برای سرویس‌ها استفاده کنید
-        return PurchaseBloc(
-          updatePurchase: UpdatePurchaseUseCase(
-            repository: RepositoryProvider.of(context),
-          ),
-          getPurchasesUseCase: GetAllPurchasesUseCase(
-            repository: RepositoryProvider.of(context), // نیاز به تنظیم دارد
-          ),
-          createPurchaseUseCase: CreatePurchaseUseCase(
-            repository: RepositoryProvider.of(context), // نیاز به تنظیم دارد
-          ),
-        )..add(LoadPurchases());
+        // دریافت بلوک از GetIt
+        final bloc = GetIt.instance<PurchaseBloc>();
+        // اضافه کردن event اولیه
+        bloc.add(LoadPurchasesEvent());
+        return bloc;
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('لیست فاکتورهای خرید')),
+        appBar: AppBar(
+          title: const Text('لیست فاکتورهای خرید'),
+        ),
         body: const PurchaseListView(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -48,15 +41,43 @@ class PurchaseListPage extends StatelessWidget {
   }
 }
 
-// صفحه ایجاد فاکتور (یک نمونه ساده)
 class CreatePurchasePage extends StatelessWidget {
   const CreatePurchasePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // استفاده از همان بلوک صفحه لیست
+    final purchaseBloc = context.read<PurchaseBloc>();
+
     return Scaffold(
-      appBar: AppBar(title: const Text('ثبت فاکتور خرید جدید')),
-      body: const Center(child: Text('فرم ثبت فاکتور خرید اینجا قرار می‌گیرد')),
+      appBar: AppBar(
+        title: const Text('ثبت فاکتور خرید جدید'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // فرم ایجاد فاکتور اینجا قرار می‌گیرد
+            // ...
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // ایجاد فاکتور جدید
+                // final invoice = PurchaseInvoiceModel(...);
+                // purchaseBloc.add(CreatePurchaseEvent(invoice));
+
+                // بعد از ایجاد، بازگشت به صفحه لیست
+                Navigator.pop(context);
+              },
+              child: const Text('ثبت فاکتور'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

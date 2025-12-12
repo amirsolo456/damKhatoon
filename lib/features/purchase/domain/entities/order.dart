@@ -3,7 +3,7 @@ import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
-
+part 'order.g.dart';
 @JsonSerializable()
 class Order extends Equatable {
   @JsonKey(name: 'ID')

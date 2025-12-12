@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -8,14 +7,16 @@ part 'user.g.dart';
 class User {
   @JsonKey(required: true)
   final int id;
-  @JsonLiteral('UserName',asConst: false)
-  @JsonSerializable(fieldRename: FieldRename.snake)
   final String username;
-
   final String password;
+  final String name;
+  final int age;
   final String email;
-  final DateTime lastLogin;
-  final DateTime dataCreated;
+  // @JsonKey(toJson: _toJson, fromJson: _fromJson)
+  final int lastLogin;
+  // @JsonKey(toJson: _toJson, fromJson: _fromJson)
+  final int dataCreated;
+
   final UserRank rank;
 
   const User({
@@ -26,7 +27,20 @@ class User {
     required this.lastLogin,
     required this.dataCreated,
     required this.rank,
+    required this.name,
+    required this.age,
   });
+
+  static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
+
+  static DateTime _fromJson(dynamic value) {
+    if (value is int) {
+      return DateTime.fromMillisecondsSinceEpoch(value);
+    } else if (value is String) {
+      return DateTime.parse(value);
+    }
+    return DateTime.now();
+  }
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
