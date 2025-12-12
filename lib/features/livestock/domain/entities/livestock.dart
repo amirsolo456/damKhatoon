@@ -3,7 +3,7 @@ import 'package:khatoon_container/features/animal/domain/entities/enums.dart';
 
 part 'livestock.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.pascal)
+@JsonSerializable()
 class LivestockSummary {
   final String id;
   @JsonKey(name: 'tagNumber')

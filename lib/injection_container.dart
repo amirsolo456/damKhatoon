@@ -148,8 +148,8 @@ class InjectionContainer {
       ),
     );
 
-    sl.lazySingleton<DeletePurchaseItemByIdUseCase>(
-      () => DeletePurchaseItemByIdUseCase(
+    sl.lazySingleton<DeletePurchaseItemUseCase>(
+      () => DeletePurchaseItemUseCase(
         repository: sl<PurchaseRemoteDataSource>(),
       ),
     );

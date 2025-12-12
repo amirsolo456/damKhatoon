@@ -6,7 +6,7 @@ import 'package:khatoon_container/features/purchase/domain/entities/payment.dart
 
 part 'payment_model.g.dart';
 
-@JsonSerializable(explicitToJson: true,fieldRename: FieldRename.pascal)
+@JsonSerializable()
 class PaymentModel extends Payment {
   @JsonKey(name: 'Deliveries')
   final List<DeliveryModel> deliveryModels;

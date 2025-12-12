@@ -7,7 +7,7 @@ import '../purchase_item/purchase_item_model.dart';
 
 part 'purchase_invoice_model.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.pascal)
+@JsonSerializable()
 class PurchaseInvoiceModel extends PurchaseInvoice {
   final List<DeliveryModel> deliveries;
   final List<PurchaseItemModel> items;

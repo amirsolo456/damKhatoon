@@ -4,7 +4,7 @@ import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/order.dart';
 part 'order_model.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.pascal)
+@JsonSerializable()
 class OrderModel extends Order {
   const OrderModel({
     required super.id,

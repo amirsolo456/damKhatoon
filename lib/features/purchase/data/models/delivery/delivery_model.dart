@@ -1,13 +1,13 @@
-// features/purchase/data/models/delivery_model.dart
 import 'package:json_annotation/json_annotation.dart';
-import '../../../domain/entities/delivery.dart';
+import 'package:khatoon_container/features/purchase/domain/entities/delivery.dart';
 
 part 'delivery_model.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.pascal)
+@JsonSerializable()
 class DeliveryModel extends Delivery {
   const DeliveryModel({
-    @JsonKey(toJson: _toJson, fromJson: _fromJson) required DateTime date,
+    @JsonKey(toJson: _toJson, fromJson: _fromJson)
+    required DateTime date,
     required int count,
     required int id,
     required double totalWeight,

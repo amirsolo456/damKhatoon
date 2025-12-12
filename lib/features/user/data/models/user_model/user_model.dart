@@ -1,5 +1,4 @@
 import 'package:isar/isar.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
 import 'package:khatoon_container/features/user/domain/entities/user_dto/user.dart';
 

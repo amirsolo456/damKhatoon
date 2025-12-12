@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 part 'delivery.g.dart';
 
 
-@JsonSerializable(fieldRename: FieldRename.pascal)
+@JsonSerializable()
 class Delivery extends Equatable {
   final int id;
   @JsonKey(toJson: _toJson, fromJson: _fromJson)
@@ -35,6 +35,7 @@ class Delivery extends Equatable {
       _$DeliveryFromJson(json);
 
   Map<String, dynamic> toJson() => _$DeliveryToJson(this);
+
   @override
   List<Object?> get props => [id, date, count, totalWeight];
 }
