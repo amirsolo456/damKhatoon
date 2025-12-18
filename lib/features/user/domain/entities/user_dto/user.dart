@@ -12,9 +12,7 @@ class User {
   final String name;
   final int age;
   final String email;
-  // @JsonKey(toJson: _toJson, fromJson: _fromJson)
   final int lastLogin;
-  // @JsonKey(toJson: _toJson, fromJson: _fromJson)
   final int dataCreated;
 
   final UserRank rank;
@@ -31,16 +29,16 @@ class User {
     required this.age,
   });
 
-  static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
-
-  static DateTime _fromJson(dynamic value) {
-    if (value is int) {
-      return DateTime.fromMillisecondsSinceEpoch(value);
-    } else if (value is String) {
-      return DateTime.parse(value);
-    }
-    return DateTime.now();
-  }
+  // static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
+  //
+  // static DateTime _fromJson(dynamic value) {
+  //   if (value is int) {
+  //     return DateTime.fromMillisecondsSinceEpoch(value);
+  //   } else if (value is String) {
+  //     return DateTime.parse(value);
+  //   }
+  //   return DateTime.now();
+  // }
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

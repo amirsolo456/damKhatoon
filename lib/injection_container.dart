@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:hive/hive.dart';
 import 'package:isar/isar.dart';
 import 'package:khatoon_container/core/storage/local_storage/isar/data/repositories/isar_provider.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/delivery_usecase.dart';
@@ -149,9 +150,8 @@ class InjectionContainer {
     );
 
     sl.lazySingleton<DeletePurchaseItemUseCase>(
-      () => DeletePurchaseItemUseCase(
-        repository: sl<PurchaseRemoteDataSource>(),
-      ),
+      () =>
+          DeletePurchaseItemUseCase(repository: sl<PurchaseRemoteDataSource>()),
     );
 
     sl.lazySingleton<DeletePaymentUseCase>(
@@ -247,11 +247,8 @@ class InjectionContainer {
       ),
     );
 
-    // Register dependencies
-    IsarProvider().setupDependencies();
-
     GetIt.instance.registerLazySingleton<UserLocalDataSource>(
-      () => UserLocalDataSource(GetIt.instance<Isar>()),
+      () => UserLocalDataSource(),
     );
 
     GetIt.instance.registerLazySingleton<UserRepository>(

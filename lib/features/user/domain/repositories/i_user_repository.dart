@@ -4,7 +4,10 @@ import 'package:khatoon_container/features/user/domain/entities/user_dto/user.da
 
 
 abstract class IUserRepository {
-  Future<void> addUser(UserModel user);
+  Future<void> addUser(UserModel userModel);
   Future<List<UserModel>> getAllUsers();
   Future<UserModel?> getUserById(int id);
+  Future<void> updateUser(UserModel userModel);
+  Future<void> deleteUser(int id);
+  Future<void> clearAllUsers();
 }

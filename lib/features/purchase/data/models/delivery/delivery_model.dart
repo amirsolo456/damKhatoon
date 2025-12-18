@@ -6,17 +6,15 @@ part 'delivery_model.g.dart';
 @JsonSerializable()
 class DeliveryModel extends Delivery {
   const DeliveryModel({
-    @JsonKey(toJson: _toJson, fromJson: _fromJson)
-    required DateTime date,
+    required int date,
     required int count,
     required int id,
     required double totalWeight,
   }) : super(id: id, date: date, count: count, totalWeight: totalWeight);
 
-  static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
+  static int dateToJson(int value) => value;
 
-  static DateTime _fromJson(int value) =>
-      DateTime.fromMillisecondsSinceEpoch(value);
+  static int dateFromJson(int value) => value;
 
   factory DeliveryModel.fromJson(Map<String, dynamic> json) =>
       _$DeliveryModelFromJson(json);

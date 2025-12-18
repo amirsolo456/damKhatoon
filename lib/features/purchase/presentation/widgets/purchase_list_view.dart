@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_state.dart';
-
-
 
 class PurchaseListView extends StatelessWidget {
   const PurchaseListView({super.key});
@@ -14,24 +11,18 @@ class PurchaseListView extends StatelessWidget {
     return BlocBuilder<PurchaseBloc, PurchaseState>(
       builder: (context, state) {
         if (state is PurchaseLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (state is PurchaseErrorState) {
-          return Center(
-            child: Text(state.message),
-          );
+          return Center(child: Text(state.message));
         }
 
         if (state is PurchasesLoadedState) {
           final invoices = state.invoices;
 
           if (invoices.isEmpty) {
-            return const Center(
-              child: Text('هیچ فاکتور خریدی ثبت نشده است'),
-            );
+            return const Center(child: Text('هیچ فاکتور خریدی ثبت نشده است'));
           }
 
           return ListView.builder(
@@ -50,8 +41,9 @@ class PurchaseListView extends StatelessWidget {
                       invoice.isSettled ? 'تسویه شده' : 'در انتظار',
                       style: const TextStyle(color: Colors.white),
                     ),
-                    backgroundColor:
-                    invoice.isSettled ? Colors.green : Colors.orange,
+                    backgroundColor: invoice.isSettled
+                        ? Colors.green
+                        : Colors.orange,
                   ),
                   onTap: () {
                     // رفتن به صفحه جزئیات فاکتور

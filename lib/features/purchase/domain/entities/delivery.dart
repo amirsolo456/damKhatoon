@@ -8,8 +8,7 @@ part 'delivery.g.dart';
 @JsonSerializable()
 class Delivery extends Equatable {
   final int id;
-  @JsonKey(toJson: _toJson, fromJson: _fromJson)
-  final DateTime date;
+  final int date;
   final int count;
   final double totalWeight;
 
@@ -20,15 +19,15 @@ class Delivery extends Equatable {
     required this.totalWeight,
   });
 
-  static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
+  static int _toJson(int value) => value ;
 
-  static DateTime _fromJson(dynamic value) {
-    if (value is int) {
-      return DateTime.fromMillisecondsSinceEpoch(value);
-    } else if (value is String) {
-      return DateTime.parse(value);
-    }
-    return DateTime.now();
+  static int _fromJson(int value) {
+    // if (value is int) {
+    //   return DateTime.fromMillisecondsSinceEpoch(value);
+    // } else if (value is String) {
+    //   return DateTime.parse(value);
+    // }
+    return value;
   }
 
   factory Delivery.fromJson(Map<String, dynamic> json) =>

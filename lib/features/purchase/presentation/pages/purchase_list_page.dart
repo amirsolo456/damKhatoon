@@ -29,7 +29,7 @@ class PurchaseListPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
+               MaterialPageRoute(
                 builder: (context) => const CreatePurchasePage(),
               ),
             );

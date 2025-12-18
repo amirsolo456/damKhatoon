@@ -1,15 +1,19 @@
+import 'package:hive/hive.dart';
 import 'package:isar/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
 import 'package:khatoon_container/features/user/domain/entities/user_dto/user.dart';
 
 part 'user_model.g.dart';
 
-@Collection()
-class UserModel {
+@JsonSerializable()
+class UserModel extends HiveObject{
   Id id = Isar.autoIncrement;
-
+  @HiveField(0)
   late String? username;
+  @HiveField(1)
   late String? password;
+  @HiveField(2)
   late String? email;
   late int? lastLogin;
   late int? dataCreated;
@@ -19,6 +23,11 @@ class UserModel {
   int? age;
 
   UserModel();
+
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   // تبدیل از Entity
   UserModel.fromEntity(User user) {
