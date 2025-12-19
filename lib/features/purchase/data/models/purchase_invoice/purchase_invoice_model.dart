@@ -20,7 +20,7 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
 
   const PurchaseInvoiceModel({
     required int id,
-    @JsonKey(toJson: _toJson, fromJson: _fromJson) required DateTime date,
+    required int date,
     required int status,
     @JsonEnum(alwaysCreate: true) required PaymentStatus paymentStatus,
     @JsonEnum(alwaysCreate: true) required DeliveryStatus deliveryStatus,
@@ -50,16 +50,16 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
          payments: payments,
        );
 
-  static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
-
-  static DateTime _fromJson(dynamic value) {
-    if (value is int) {
-      return DateTime.fromMillisecondsSinceEpoch(value);
-    } else if (value is String) {
-      return DateTime.parse(value);
-    }
-    return DateTime.now();
-  }
+  // static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
+  //
+  // static DateTime _fromJson(dynamic value) {
+  //   if (value is int) {
+  //     return DateTime.fromMillisecondsSinceEpoch(value);
+  //   } else if (value is String) {
+  //     return DateTime.parse(value);
+  //   }
+  //   return DateTime.now();
+  // }
 
   // تبدیل از JSON به مدل
   factory PurchaseInvoiceModel.fromJson(Map<String, dynamic> json) {
@@ -124,7 +124,7 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
       sellerId: json['sellerId'] as String,
       sellerName: json['SellerName'] ?? '',
       notes: json['notes'] ?? '',
-      date: DateTime.parse(json['date'] as String),
+      date:  (json['date'] as int),
       status: (json['Status'] ?? 0) as int,
       totalAmount: (json['totalAmount'] as num).toDouble(),
       paidAmount: (json['paidAmount'] as num).toDouble(),
@@ -145,7 +145,7 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
       'sellerId': sellerId,
       'SellerName': sellerName,
       'notes': notes,
-      'date': date.toIso8601String(),
+      'date': date ,
       'Status': status,
       'totalAmount': totalAmount,
       'paidAmount': paidAmount,

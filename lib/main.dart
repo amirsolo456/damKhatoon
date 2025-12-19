@@ -18,8 +18,8 @@ void main() async {
   // final user = sl<UserLocalDataSource>();
   //  user.getAllUsers();
   runApp(
-    ChangeNotifierProvider(
-      lazy: true,
+      ChangeNotifierProvider(
+      lazy: false,
       create: (context) => AppNotifier(),
       child: Consumer<AppNotifier>(
         builder: (context, notifier, child) {
@@ -76,7 +76,7 @@ class MainAppScreen extends StatelessWidget {
 
     return Directionality(
       textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
-      child: (!notifier.isLogin
+      child: (notifier.isLogin
           ? const SignInPage()
           : Scaffold(
               backgroundColor: Colors.white,

@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_state.dart';
-
-class PurchaseListView extends StatelessWidget {
+class PurchaseListView extends StatefulWidget {
   const PurchaseListView({super.key});
+
+  @override
+  State<PurchaseListView> createState() => _PurchaseListViewState();
+}
+class _PurchaseListViewState extends State<PurchaseListView> {
+  @override
+  void initState() {
+    super.initState();
+    // فقط اگر bloc هنوز close نشده باشد event ارسال می‌کند
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final bloc = context.read<PurchaseBloc>();
+      if (!bloc.isClosed) {
+        bloc.add(LoadPurchasesEvent());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

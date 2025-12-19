@@ -2,29 +2,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:khatoon_container/app_notifier.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
+import 'package:khatoon_container/features/purchase/presentation/pages/create_purchase_page.dart';
 import 'package:khatoon_container/features/purchase/presentation/widgets/purchase_list_view.dart';
+import 'package:khatoon_container/injection_container.dart';
+import 'package:provider/provider.dart';
 
 class PurchaseListPage extends StatelessWidget {
   const PurchaseListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // ابتدا مطمئن شویم GetIt initialize شده است
+    final notifier = Provider.of<AppNotifier>(context);
     return BlocProvider(
-      create: (context) {
-        // دریافت بلوک از GetIt
-        final bloc = GetIt.instance<PurchaseBloc>();
-        // اضافه کردن event اولیه
-        bloc.add(LoadPurchasesEvent());
-        return bloc;
-      },
+       create: (context) => sl<PurchaseBloc>()..add(LoadPurchasesEvent()),
+
+      // create: (context) {
+      //   final bloc = sl<PurchaseBloc>();
+      //   bloc.add(LoadPurchasesEvent());
+      //   return bloc;
+      // },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('لیست فاکتورهای خرید'),
-        ),
-        body: const PurchaseListView(),
+        appBar: AppBar(title: const Text('لیست فاکتورهای خرید')),
+        body:const PurchaseListView(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
@@ -41,43 +43,4 @@ class PurchaseListPage extends StatelessWidget {
   }
 }
 
-class CreatePurchasePage extends StatelessWidget {
-  const CreatePurchasePage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    // استفاده از همان بلوک صفحه لیست
-    final purchaseBloc = context.read<PurchaseBloc>();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ثبت فاکتور خرید جدید'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // فرم ایجاد فاکتور اینجا قرار می‌گیرد
-            // ...
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // ایجاد فاکتور جدید
-                // final invoice = PurchaseInvoiceModel(...);
-                // purchaseBloc.add(CreatePurchaseEvent(invoice));
-
-                // بعد از ایجاد، بازگشت به صفحه لیست
-                Navigator.pop(context);
-              },
-              child: const Text('ثبت فاکتور'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

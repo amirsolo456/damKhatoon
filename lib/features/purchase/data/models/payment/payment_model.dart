@@ -8,32 +8,77 @@ part 'payment_model.g.dart';
 
 @JsonSerializable()
 class PaymentModel extends Payment {
-  @JsonKey(name: 'Deliveries')
+  // @JsonKey(name: 'ID', fromJson: _idFromJson, toJson: _idToJson)
+  @override
+  final int id;
+
+  @override
+  final int date;
+
+  @JsonKey(name: 'method', defaultValue: '')
+  final String method;
+
+  @override
+  @JsonKey(name: 'sellerId')
+  final String sellerId; // JSON شما عدد است، پس باید int باشد نه String
+
+  @override
+  @JsonKey(name: 'sellerName', defaultValue: '')
+  final String sellerName;
+
+  @override
+  @JsonKey(name: 'status', defaultValue: 0)
+  final int status;
+
+  @override
+  @JsonKey(name: 'totalAmount', defaultValue: 0.0)
+  final double totalAmount;
+
+  @override
+  @JsonKey(name: 'paidAmount', defaultValue: 0.0)
+  final double paidAmount;
+
+  @override
+  @JsonKey(name: 'paymentStatus', defaultValue: PaymentStatus.unpaid)
+  final PaymentStatus paymentStatus;
+
+  @override
+  @JsonKey(name: 'deliveryStatus', defaultValue: DeliveryStatus.pending)
+  final DeliveryStatus deliveryStatus;
+
+  @override
+  @JsonKey(name: 'isSettled', defaultValue: false)
+  final bool isSettled;
+
+  @override
+  @JsonKey(name: 'notes', defaultValue: '')
+  final String notes;
+
+  @JsonKey(name: 'Deliveries', defaultValue: [])
   final List<DeliveryModel> deliveryModels;
 
-  @JsonKey(name: 'Items')
+  @JsonKey(name: 'Items', defaultValue: [])
   final List<PurchaseItemModel> purchaseItemModels;
 
-  @JsonKey(name: 'Payments')
+  @JsonKey(name: 'Payments', defaultValue: [])
   final List<PaymentModel> paymentModels;
 
   const PaymentModel({
-    required int id,
-    @JsonKey(toJson: _toJson, fromJson: _fromJson)
-    required DateTime date,
-    @JsonKey(defaultValue: '') String method = '',
-    required int sellerId,
-    required String sellerName,
-    required int status,
-    required double totalAmount,
-    required double paidAmount,
-    required PaymentStatus paymentStatus,
-    required DeliveryStatus deliveryStatus,
-    required bool isSettled,
     required this.deliveryModels,
     required this.purchaseItemModels,
     required this.paymentModels,
-    required String notes,
+    required this.id,
+    required this.date,
+    required this.method,
+    required this.sellerId,
+    required this.sellerName,
+    required this.status,
+    required this.totalAmount,
+    required this.paidAmount,
+    required this.paymentStatus,
+    required this.deliveryStatus,
+    required this.isSettled,
+    required this.notes,
   }) : super(
          id: id,
          date: date,
@@ -54,25 +99,28 @@ class PaymentModel extends Payment {
          notes: notes,
        );
 
-  static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
+  static int _toJson(int value) => value;
 
-  static DateTime _fromJson(dynamic value) {
-    if (value is int) {
-      return DateTime.fromMillisecondsSinceEpoch(value);
-    } else if (value is String) {
-      return DateTime.parse(value);
-    }
-    return DateTime.now();
+  static int _fromJson(dynamic value) {
+    return value;
+    // if (value is int) {
+    //   return DateTime.fromMillisecondsSinceEpoch(value);
+    // } else if (value is String) {
+    //   return DateTime.parse(value);
+    // }
+    // return DateTime.now();
   }
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) =>
       _$PaymentModelFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$PaymentModelToJson(this);
 
-
+  @override
   List<DeliveryModel> get deliveries => deliveryModels;
 
+  @override
   List<PurchaseItemModel> get items => purchaseItemModels;
 
   List<PaymentModel> get innerPayments => paymentModels;

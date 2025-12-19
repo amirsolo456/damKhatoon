@@ -11,7 +11,7 @@ class Order extends Equatable {
   final int itemId;
   final int userId;
   final UserRank userRank;
-  final DateTime date;
+  final int date;
   final int quantity;
   final Decimal price;
   final double totalWeight;

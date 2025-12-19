@@ -8,7 +8,7 @@ class PurchaseInvoice extends Equatable {
   final int id;
   final String sellerId;
   final String sellerName;
-  final DateTime date;
+  final int date;
   final double totalAmount;
   final double paidAmount;
   final PaymentStatus paymentStatus; // 'paid', 'partial', 'unpaid'
@@ -64,7 +64,7 @@ class PurchaseInvoice extends Equatable {
   PurchaseInvoice copyWith({
     int? id,
     String? sellerId,
-    DateTime? date,
+    int? date,
     double? totalAmount,
     double? paidAmount,
     PaymentStatus? paymentStatus,
@@ -97,7 +97,7 @@ class PurchaseInvoice extends Equatable {
     return PurchaseInvoice(
       id: json['id'],
       sellerId: json['sellerId'],
-      date: DateTime.parse(json['date']),
+      date:  (json['date']) as int,
       totalAmount: (json['totalAmount'] as num).toDouble(),
       paidAmount: (json['paidAmount'] as num).toDouble(),
       paymentStatus: PaymentStatus.values.firstWhere(
@@ -122,7 +122,7 @@ class PurchaseInvoice extends Equatable {
     return {
       'Id': id,
       'SellerId': sellerId,
-      'Date': date.toIso8601String(),
+      'Date': date ,
       'TotalAmount': totalAmount,
       'PaidAmount': paidAmount,
       'PaymentStatus': paymentStatus.name,

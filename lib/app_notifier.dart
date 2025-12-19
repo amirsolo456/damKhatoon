@@ -6,6 +6,7 @@ import 'package:khatoon_container/core/components/pages/home/presentation/home_p
 import 'package:khatoon_container/core/components/pages/profile/presentation/profile_page.dart';
 import 'package:khatoon_container/core/components/pages/settings/presentation/settings_page.dart';
 import 'package:khatoon_container/core/components/pages/sign_in/presentation/sign_in_page.dart';
+import 'package:khatoon_container/features/purchase/presentation/pages/create_purchase_page.dart';
 import 'package:khatoon_container/features/purchase/presentation/pages/purchase_list_page.dart';
 
 class AppNotifier extends ChangeNotifier {
@@ -89,7 +90,7 @@ class AppNotifier extends ChangeNotifier {
       icon:const Icon(IconData(fontFamily: 'assets/user_profile.png',0xe800 )),
       pageIndex: 5,
       id: 'purchases',
-      routeName: '/purchaseListPage',
+      routeName: '/purchase/purchaseListPage',
     ),
     MenuItem(
       pageIndex: 6,
@@ -132,6 +133,34 @@ class AppNotifier extends ChangeNotifier {
     ),
   ];
 
+
+  Future<void>  showMyDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   // Navigation State
   Map<String, bool> _expandedStates = {};
   String? _selectedItemId;
@@ -291,8 +320,10 @@ class AppNotifier extends ChangeNotifier {
         return const ProfilePage();
       case '/settings/notifications':
         return const ProfilePage();
-      case '/purchaseListPage':
+      case '/purchase/purchaseListPage':
         return const PurchaseListPage();
+      case '/purchase/createPurchasePage':
+        return const CreatePurchasePage();
       case '/signIn':
         return const SignInPage();
       default:

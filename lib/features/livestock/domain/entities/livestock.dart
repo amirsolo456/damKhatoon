@@ -14,8 +14,8 @@ class LivestockSummary {
   final String? imageUrl;
   final HealthStatus healthStatus;
   final ReproductionStatus reproductionStatus;
-  @JsonKey(toJson: _toJson, fromJson: _fromJson)
-  final DateTime? lastCheckupDate;
+  // @JsonKey(toJson: _toJson, fromJson: _fromJson)
+  final int? lastCheckupDate;
   final String? location;
 
   const LivestockSummary({
@@ -30,10 +30,10 @@ class LivestockSummary {
     this.lastCheckupDate,
     this.location,
   });
-  static int _toJson(DateTime? value) => (value != null ? value.millisecondsSinceEpoch : DateTime.now().toUtc().millisecond);
-
-  static DateTime? _fromJson(int? value) =>
-      DateTime.fromMillisecondsSinceEpoch(value ?? 0);
+  // static int _toJson(DateTime? value) => (value != null ? value.millisecondsSinceEpoch : DateTime.now().toUtc().millisecond);
+  //
+  // static DateTime? _fromJson(int? value) =>
+  //     DateTime.fromMillisecondsSinceEpoch(value ?? 0);
 
   factory LivestockSummary.fromJson(Map<String, dynamic> json) =>
       _$LivestockSummaryFromJson(json);

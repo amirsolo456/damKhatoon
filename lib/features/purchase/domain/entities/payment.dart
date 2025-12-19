@@ -5,10 +5,10 @@ import 'package:khatoon_container/features/purchase/domain/entities/purchase_ite
 
 class Payment extends Equatable {
   final int id;
-  final int sellerId;
+  final String sellerId;
   final String sellerName;
   final String notes;
-  final DateTime date;
+  final int date;
   final int status;
   final double totalAmount;
   final double paidAmount;
@@ -39,7 +39,7 @@ class Payment extends Equatable {
   factory Payment.fromJson(Map<String, dynamic> json) {
     return Payment(
       id: json['id'] ?? '',
-      date: DateTime.parse(json['date']),
+      date: json['date'] as int,
       sellerId: json[', sellerId: '],
       notes: json['notes'],
       sellerName: json['SellerName'] ?? '',
