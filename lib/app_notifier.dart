@@ -5,6 +5,7 @@ import 'package:khatoon_container/core/components/menu/domain/entities/menu_item
 import 'package:khatoon_container/core/components/pages/home/presentation/home_page.dart';
 import 'package:khatoon_container/core/components/pages/profile/presentation/profile_page.dart';
 import 'package:khatoon_container/core/components/pages/settings/presentation/settings_page.dart';
+import 'package:khatoon_container/core/components/pages/sign_in/presentation/sign_in_page.dart';
 import 'package:khatoon_container/features/purchase/presentation/pages/purchase_list_page.dart';
 
 class AppNotifier extends ChangeNotifier {
@@ -91,7 +92,7 @@ class AppNotifier extends ChangeNotifier {
       routeName: '/purchaseListPage',
     ),
     MenuItem(
-      pageIndex: 5,
+      pageIndex: 6,
       id: 'settings',
       label: 'تنظیمات',
       icon:const Icon(IconData(fontFamily: 'assets/user_profile.png',0xe800 )),
@@ -122,6 +123,13 @@ class AppNotifier extends ChangeNotifier {
         ),
       ],
     ),
+    MenuItem(
+      pageIndex: 7,
+      id: 'signIn',
+      label: 'خروج',
+      icon:const Icon(IconData(fontFamily: 'assets/user_profile.png',0xe800 )),
+      routeName: '/signIn',
+    ),
   ];
 
   // Navigation State
@@ -134,6 +142,7 @@ class AppNotifier extends ChangeNotifier {
   ThemeConfig _themeConfig = ThemeConfig();
 
   // UI State
+  bool _isLogin =false;
   bool _isDrawerOpen = false;
   bool _isLoading = false;
   String? _errorMessage;
@@ -159,9 +168,16 @@ class AppNotifier extends ChangeNotifier {
   void setSidebarCollapsed(bool collapsed) {
     _sidebarCollapsed = collapsed;
     notifyListeners();
-
   }
+
+  void changeToLogin(bool loginState) {
+    _isLogin = loginState;
+    notifyListeners();
+  }
+
   List<MenuItem> get menuItems => _MenuItems;
+
+  bool get isLogin => _isLogin;
 
   ThemeConfig get themeConfig => _themeConfig;
 
@@ -277,6 +293,8 @@ class AppNotifier extends ChangeNotifier {
         return const ProfilePage();
       case '/purchaseListPage':
         return const PurchaseListPage();
+      case '/signIn':
+        return const SignInPage();
       default:
         return const ProfilePage();
     }

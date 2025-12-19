@@ -4,9 +4,7 @@ import 'package:khatoon_container/app_notifier.dart';
 import 'package:provider/provider.dart';
 
 class MainAppBar extends StatefulWidget {
-
-
-  const MainAppBar({super.key });
+  const MainAppBar({super.key});
 
   @override
   State<MainAppBar> createState() => _MainAppBarState();
@@ -37,20 +35,17 @@ class _MainAppBarState extends State<MainAppBar> {
             lg; // per HTML: search hidden on small, visible on xl:block => visible from lg+
         // HTML shows search in a div hidden xl:block -> that means visible on xl and up.
         // To be flexible we show from lg; change to isXL if you want strictly only xl.
-
         return Container(
           width: double.infinity,
+          margin: const EdgeInsets.only(top: 1, left: 1, right: 1),
           padding: EdgeInsets.symmetric(
             horizontal: isXL ? 0 : 12,
             vertical: isXL ? 16 : 12,
           ),
           decoration: BoxDecoration(
-            border: Border(
-              bottom: isXL
-                  ? BorderSide.none
-                  : BorderSide(
-                      color: isDark ? Colors.grey[800]! : Colors.grey[200]!,
-                    ),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: isDark ? Colors.grey[800]! : Colors.grey[300]!,
             ),
           ),
           child: Row(
@@ -70,55 +65,6 @@ class _MainAppBarState extends State<MainAppBar> {
                 ),
               ),
 
-              // GestureDetector(
-              //   onTap: _toggleSidebar,
-              //   child: Container(
-              //     height: isXL ? 44 : 40,
-              //     width: isXL ? 44 : 40,
-              //     decoration: BoxDecoration(
-              //       color: sidebarToggle
-              //           ? Colors.transparent
-              //           : (isDark ? Colors.grey[850] : Colors.grey[100]),
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //     margin: const EdgeInsets.only(right: 8),
-              //     child: Center(
-              //       child: AnimatedSwitcher(
-              //         duration: const Duration(milliseconds: 180),
-              //         transitionBuilder: (child, anim) =>
-              //             FadeTransition(opacity: anim, child: child),
-              //         child: sidebarToggle
-              //             ? Icon(
-              //                 Icons.close,
-              //                 key: const ValueKey('close'),
-              //                 size: isXL ? 16 : 20,
-              //                 color: isDark
-              //                     ? Colors.grey[300]
-              //                     : Colors.grey[700],
-              //               )
-              //             : (isXL
-              //                   ? Icon(
-              //                       Icons.view_headline,
-              //                       key: const ValueKey('xl_hamburger'),
-              //                       size: 16,
-              //                       color: isDark
-              //                           ? Colors.grey[300]
-              //                           : Colors.grey[700],
-              //                     )
-              //                   : Icon(
-              //                       Icons.menu,
-              //                       key: const ValueKey('menu'),
-              //                       size: 20,
-              //                       color: isDark
-              //                           ? Colors.grey[300]
-              //                           : Colors.grey[700],
-              //                     )),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
-              // Logo (visible only when NOT XL) -> html: class="xl:hidden"
               if (!isXL)
                 GestureDetector(
                   onTap: () {
@@ -136,51 +82,11 @@ class _MainAppBarState extends State<MainAppBar> {
                   ),
                 ),
 
-              // Application nav menu button (visible only on small screens in HTML - xl:hidden)
-              // if (!isXL)
-              //   GestureDetector(
-              //     onTap: _toggleSidebar,
-              //     child: Container(
-              //       margin: const EdgeInsets.only(right: 8),
-              //       height: 40,
-              //       width: 40,
-              //       decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //       ),
-              //       child: Center(
-              //         child: Icon(
-              //           Icons.apps_rounded,
-              //           size: 20,
-              //           color: isDark ? Colors.grey[300] : Colors.grey[700],
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-
               // Spacer between left controls and search (matches justify-between)
-              const SizedBox(width: 8),
-              // Expanded takes the rest of the space to align search/other items to center/right
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: isXL
-                      ? MainAxisAlignment.start
-                      : MainAxisAlignment.spaceBetween,
-                  children: [
-                    // If you want some left content on XL, put here. In original HTML left of search is the toggles/logo.
-                    // We keep a flexible spacer so search sits in middle-left like original.
-                    if (isXL) const SizedBox(width: 8),
-
-                    // Search form - visible on xl in HTML. Here we show for lg+ (adjust if needed).
-                    if (showSearch)
-                      SizedBox(
-                        width: isXL ? 430 : 300,
-                        child: _buildSearchField(context, isDark),
-                      ),
-
-                    // Right side: you can put user avatar, icons, etc. For parity with HTML we leave it empty or add small gap.
-                    if (!showSearch) const Spacer(),
-                  ],
-                ),
+              const Spacer(),
+              SizedBox(
+                width: isXL ? 430 : 300,
+                child: _buildSearchField(context, isDark),
               ),
             ],
           ),
@@ -194,7 +100,7 @@ class _MainAppBarState extends State<MainAppBar> {
       height: 44,
       child: TextField(
         style: TextStyle(
-          color: isDark ? Colors.white.withOpacity(0.9) : Colors.grey[900],
+          color: isDark ? Colors.white.withAlpha(900) : Colors.grey[900],
         ),
         decoration: InputDecoration(
           filled: true,
@@ -214,24 +120,24 @@ class _MainAppBarState extends State<MainAppBar> {
           ),
           hintText: 'Search or type command...',
           hintStyle: TextStyle(
-            color: isDark ? Colors.white.withOpacity(0.3) : Colors.grey[400],
+            color: isDark ? Colors.white.withAlpha(300) : Colors.grey[400],
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: isDark ? Colors.grey[800]! : Colors.grey[200]!,
+              color: isDark ? Colors.grey[800]! : Colors.grey[300]!,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: isDark ? Colors.grey[800]! : Colors.grey[200]!,
+              color: isDark ? Colors.grey[800]! : Colors.grey[300]!,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: Colors.blue.withOpacity(0.6),
+              color: Colors.blue.withAlpha(600),
               width: 1.5,
             ),
           ),
@@ -246,7 +152,7 @@ class _MainAppBarState extends State<MainAppBar> {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                 elevation: 0,
                 backgroundColor: isDark
-                    ? Colors.white.withOpacity(0.02)
+                    ? Colors.white.withAlpha(30)
                     : Colors.grey[50],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -256,9 +162,9 @@ class _MainAppBarState extends State<MainAppBar> {
                 ),
                 foregroundColor: isDark ? Colors.grey[300] : Colors.grey[600],
               ),
-              child:const Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
-                children:   [
+                children: [
                   Text('⌘', style: TextStyle(fontSize: 12, height: 1.0)),
                   SizedBox(width: 4),
                   Text('K', style: TextStyle(fontSize: 12, height: 1.0)),

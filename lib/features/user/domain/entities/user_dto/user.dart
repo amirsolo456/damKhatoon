@@ -29,17 +29,6 @@ class User {
     required this.age,
   });
 
-  // static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
-  //
-  // static DateTime _fromJson(dynamic value) {
-  //   if (value is int) {
-  //     return DateTime.fromMillisecondsSinceEpoch(value);
-  //   } else if (value is String) {
-  //     return DateTime.parse(value);
-  //   }
-  //   return DateTime.now();
-  // }
-
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);

@@ -1,7 +1,6 @@
 import 'package:khatoon_container/features/purchase/data/datasources/purchase_remote_data_source.dart';
 import 'package:khatoon_container/features/purchase/data/models/delivery/delivery_model.dart';
 import 'package:khatoon_container/features/purchase/data/models/purchase_invoice/purchase_invoice_model.dart';
-import '../entities/purchase_invoice.dart';
 
 class GetDeliveryByPurchaseIdUseCase {
   final PurchaseRemoteDataSource repository;
