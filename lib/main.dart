@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -7,6 +8,8 @@ import 'package:khatoon_container/core/components/app_bar/main_app_bar.dart';
 import 'package:khatoon_container/core/components/menu/presentation/widgets/menu.dart';
 import 'package:khatoon_container/core/components/pages/home/presentation/home_page.dart';
 import 'package:khatoon_container/core/components/pages/sign_in/presentation/sign_in_page.dart';
+import 'package:khatoon_container/core/storage/cache_manager/presentation/cache_manager.dart';
+import 'package:khatoon_container/core/storage/local_storage/sqlite/data/repositories/sqlite_provider.dart';
 import 'package:khatoon_container/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:khatoon_container/injection_container.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +18,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await InjectionContainer.init();
   await Hive.initFlutter();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await LocalDatabase.createDatabase();
   // final user = sl<UserLocalDataSource>();
   //  user.getAllUsers();
   runApp(
-      ChangeNotifierProvider(
-      lazy: false,
+    ChangeNotifierProvider(
       create: (context) => AppNotifier(),
       child: Consumer<AppNotifier>(
         builder: (context, notifier, child) {
@@ -66,6 +70,7 @@ void main() async {
   );
 }
 
+@Preview(name: 'widget_preview_scaffold')
 class MainAppScreen extends StatelessWidget {
   const MainAppScreen({super.key});
 

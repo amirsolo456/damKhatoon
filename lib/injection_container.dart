@@ -1,14 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
-import 'package:isar/isar.dart';
-import 'package:khatoon_container/core/storage/local_storage/isar/data/repositories/isar_provider.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/delivery_usecase.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/payment_usecase.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/purchase_item_usecase.dart';
-import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
 import 'package:khatoon_container/features/user/data/data_sources/user_local_data_source.dart';
-import 'package:khatoon_container/features/user/data/models/user_model/user_model.dart';
 import 'package:khatoon_container/features/user/data/repositories/user_repository.dart';
 import 'package:khatoon_container/features/user/domain/usecases/user_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';

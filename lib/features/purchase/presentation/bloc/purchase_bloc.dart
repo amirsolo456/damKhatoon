@@ -10,41 +10,6 @@ import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_e
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_state.dart';
 
 class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
-  // Purchase Invoice UseCases
-  final GetPurchasesUseCase getPurchasesUseCase;
-  final GetPurchasesByIdUseCase getPurchasesByIdUseCase;
-  final CreatePurchaseUseCase createPurchaseUseCase;
-  final UpdatePurchaseUseCase updatePurchaseUseCase;
-  final DeletePurchaseUseCase deletePurchaseUseCase;
-
-  // Purchase Item UseCases
-  final GetPurchasesItemsByPurchaseIdUseCase getPurchasesItemsUseCase;
-  final CreatePurchaseItemUseCase createPurchaseItemUseCase;
-  final UpdatePurchaseItemUseCase updatePurchaseItemUseCase;
-  final DeletePurchaseItemByIdUseCase deletePurchaseItemUseCase;
-
-  // Payment UseCases
-  final GetPaymentsByInvoiceIdUseCase getPaymentsUseCase;
-  final CreatePaymentUseCase createPaymentUseCase;
-  final CreatePaymentsUseCase createPaymentsUseCase;
-  final UpdatePaymentUseCase updatePaymentUseCase;
-  final DeletePaymentUseCase deletePaymentUseCase;
-  final DeletePaymentsByIdUseCase deletePaymentByIdUseCase;
-
-  // Order UseCases
-  final GetOrdersByPurchaseIdUseCase getOrdersUseCase;
-  final CreateOrderUseCase createOrderUseCase;
-  final UpdateOrderUseCase updateOrderUseCase;
-  final DeleteOrderUseCase deleteOrderUseCase;
-  final DeleteOrdersByIdUseCase deleteOrderByIdUseCase;
-
-  // Delivery UseCases
-  final GetDeliveryByPurchaseIdUseCase getDeliveriesUseCase;
-  final CreateDeliveryUseCase createDeliveryUseCase;
-  final UpdateDeliveryUseCase updateDeliveryUseCase;
-  final DeleteDeliveryUseCase deleteDeliveryUseCase;
-  final DeleteDeliveriesByIdUseCase deleteDeliveryByIdUseCase;
-
   PurchaseBloc({
     // Purchase Invoice
     required this.getPurchasesUseCase,
@@ -108,6 +73,41 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
     on<UpdateDeliveryEvent>(_onUpdateDelivery);
     on<DeleteDeliveryEvent>(_onDeleteDelivery);
   }
+
+  // Purchase Invoice UseCases
+  final GetPurchasesUseCase getPurchasesUseCase;
+  final GetPurchasesByIdUseCase getPurchasesByIdUseCase;
+  final CreatePurchaseUseCase createPurchaseUseCase;
+  final UpdatePurchaseUseCase updatePurchaseUseCase;
+  final DeletePurchaseUseCase deletePurchaseUseCase;
+
+  // Purchase Item UseCases
+  final GetPurchasesItemsByPurchaseIdUseCase getPurchasesItemsUseCase;
+  final CreatePurchaseItemUseCase createPurchaseItemUseCase;
+  final UpdatePurchaseItemUseCase updatePurchaseItemUseCase;
+  final DeletePurchaseItemByIdUseCase deletePurchaseItemUseCase;
+
+  // Payment UseCases
+  final GetPaymentsByInvoiceIdUseCase getPaymentsUseCase;
+  final CreatePaymentUseCase createPaymentUseCase;
+  final CreatePaymentsUseCase createPaymentsUseCase;
+  final UpdatePaymentUseCase updatePaymentUseCase;
+  final DeletePaymentUseCase deletePaymentUseCase;
+  final DeletePaymentsByIdUseCase deletePaymentByIdUseCase;
+
+  // Order UseCases
+  final GetOrdersByPurchaseIdUseCase getOrdersUseCase;
+  final CreateOrderUseCase createOrderUseCase;
+  final UpdateOrderUseCase updateOrderUseCase;
+  final DeleteOrderUseCase deleteOrderUseCase;
+  final DeleteOrdersByIdUseCase deleteOrderByIdUseCase;
+
+  // Delivery UseCases
+  final GetDeliveryByPurchaseIdUseCase getDeliveriesUseCase;
+  final CreateDeliveryUseCase createDeliveryUseCase;
+  final UpdateDeliveryUseCase updateDeliveryUseCase;
+  final DeleteDeliveryUseCase deleteDeliveryUseCase;
+  final DeleteDeliveriesByIdUseCase deleteDeliveryByIdUseCase;
 
   // ============ Purchase Invoice Handlers ============
   Future<void> _onLoadPurchases(
@@ -398,120 +398,159 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
 
 final fakeJsonList = [
   {
-    "id": 1001,
-    "sellerId": "S-001",
-    "SellerName": "تهران تأمین",
-    "notes": "اولین فاکتور - تحویل کامل شده",
-    "date": "2025-12-15T10:30:00Z",
-    "Status": '1',
-    "totalAmount": 125000.0,
-    "paidAmount": 125000.0,
-    "paymentStatus": "paid",
-    "deliveryStatus": "delivered",
-    "isSettled": true,
+    "id": 1,
+    "sellerId": "seller_001",
+    "SellerName": "شرکت تامین قطعات پلیمری",
+    "notes": "صورتحساب خرید فصل اول 1403",
+    "date": 1735070400000,
+    "Status": 1,
+    "totalAmount": 75000000.0,
+    "paidAmount": 50000000.0,
+    "paymentStatus": "partial",
+    "deliveryStatus": "shipped",
+    "isSettled": false,
     "Deliveries": [
-      {"id": 201, "date": 1734306600000, "count": 2, "totalWeight": 12.5},
+      {"id": 101, "date": 1735156800000, "count": 1500, "totalWeight": 12500.5},
+      {"id": 102, "date": 1735243200000, "count": 800, "totalWeight": 6800.75},
     ],
     "Items": [
-      {"id": 1, "name": "گوشه کابینت", "quantity": 5, "price": 10000.0},
-      {"id": 2, "name": "یراق پیچ", "quantity": 10, "price": 2500.0},
+      {
+        "id": 201,
+        "name": "لوله PVC فشار قوی سایز 20",
+        "quantity": 5000,
+        "price": 8500.0,
+      },
+      {
+        "id": 202,
+        "name": "لوله PVC فشار قوی سایز 25",
+        "quantity": 3000,
+        "price": 12500.0,
+      },
+      {
+        "id": 203,
+        "name": "اتصال سه راهی 20*20*20",
+        "quantity": 2000,
+        "price": 3500.0,
+      },
     ],
     "Payments": [
       {
-        "id": 5001,
-        "date": 1734308400000,
-        "method": "card",
-        "sellerId": '1',
-        "sellerName": "تهران تأمین",
+        "id": 301,
+        "date": 1735070400000,
+        "method": "کارت به کارت",
+        "sellerId": "seller_001",
+        "sellerName": "شرکت تامین قطعات پلیمری",
         "status": 1,
-        "totalAmount": 125000.0,
-        "paidAmount": 125000.0,
+        "totalAmount": 30000000.0,
+        "paidAmount": 30000000.0,
         "paymentStatus": "paid",
-        "deliveryStatus": "delivered",
+        "deliveryStatus": "pending",
         "isSettled": true,
-        "notes": "پرداخت کامل با کارت",
+        "notes": "پیش پرداخت اولیه",
+        "Deliveries": [],
+        "Items": [],
+        "Payments": [],
+      },
+      {
+        "id": 302,
+        "date": 1735339200000,
+        "method": "چک 3 ماهه",
+        "sellerId": "seller_001",
+        "sellerName": "شرکت تامین قطعات پلیمری",
+        "status": 0,
+        "totalAmount": 45000000.0,
+        "paidAmount": 20000000.0,
+        "paymentStatus": "partial",
+        "deliveryStatus": "pending",
+        "isSettled": false,
+        "notes": "چک باقیمانده",
         "Deliveries": [],
         "Items": [],
         "Payments": [],
       },
     ],
   },
-
   {
-    "id": 1002,
-    "sellerId": "S-002",
-    "SellerName": "صنایع شمال",
-    "notes": "فاکتور با پرداخت جزئی",
-    "date": "2025-12-10T14:00:00Z",
+    "id": 2,
+    "sellerId": "seller_002",
+    "SellerName": "کارخانه تولید واشرهای صنعتی",
+    "notes": "خرید عمده واشرهای آب بندی",
+    "date": 1735425600000,
     "Status": 2,
-    "totalAmount": 450000.0,
-    "paidAmount": 150000.0,
-    "paymentStatus": "partial",
-    "deliveryStatus": "shipped",
-    "isSettled": false,
+    "totalAmount": 42000000.0,
+    "paidAmount": 42000000.0,
+    "paymentStatus": "paid",
+    "deliveryStatus": "delivered",
+    "isSettled": true,
     "Deliveries": [
-      {"id": 202, "date": 1733851200000, "count": 1, "totalWeight": 30.0},
+      {"id": 103, "date": 1735512000000, "count": 25000, "totalWeight": 1250.0},
     ],
     "Items": [
-      {"id": 3, "name": "پمپ آب صنعتی", "quantity": 1, "price": 300000.0},
-      {"id": 4, "name": "فیلتر", "quantity": 3, "price": 50000.0},
+      {
+        "id": 204,
+        "name": "واشر لاستیکی سایز 1/2 اینچ",
+        "quantity": 10000,
+        "price": 2500.0,
+      },
+      {
+        "id": 205,
+        "name": "واشر لاستیکی سایز 3/4 اینچ",
+        "quantity": 8000,
+        "price": 2800.0,
+      },
+      {
+        "id": 206,
+        "name": "واشر لاستیکی سایز 1 اینچ",
+        "quantity": 7000,
+        "price": 3200.0,
+      },
     ],
     "Payments": [
       {
-        "id": 5002,
-        "date": 1733854800000,
-        "method": "transfer",
-        "sellerId":' 2',
-        "sellerName": "صنایع شمال",
-        "status": 1,
-        "totalAmount": 450000.0,
-        "paidAmount": 150000.0,
-        "paymentStatus": "partial",
-        "deliveryStatus": "shipped",
-        "isSettled": false,
-        "notes": "پیش‌پرداخت از طریق انتقال",
+        "id": 303,
+        "date": 1735425600000,
+        "method": "نقدی",
+        "sellerId": "seller_002",
+        "sellerName": "کارخانه تولید واشرهای صنعتی",
+        "status": 2,
+        "totalAmount": 42000000.0,
+        "paidAmount": 42000000.0,
+        "paymentStatus": "paid",
+        "deliveryStatus": "delivered",
+        "isSettled": true,
+        "notes": "پرداخت کامل نقدی",
         "Deliveries": [],
         "Items": [],
-        "Payments": [
-          {
-            "id": 5010,
-            "date": 1733854800000,
-            "method": "transfer",
-            "sellerId": '2',
-            "sellerName": "صنایع شمال",
-            "status": 1,
-            "totalAmount": 150000.0,
-            "paidAmount": 150000.0,
-            "paymentStatus": "paid",
-            "deliveryStatus": "pending",
-            "isSettled": true,
-            "notes": "تراکنش فرعی",
-            "Deliveries": [],
-            "Items": [],
-            "Payments": [],
-          },
-        ],
+        "Payments": [],
       },
     ],
   },
-
   {
-    "id": 1003,
-    "sellerId": "S-003",
-    "SellerName": "پخش امید",
-    "notes": "فاکتور جدید - پرداخت نشده",
-    "date": "2025-12-18T09:00:00Z",
+    "id": 3,
+    "sellerId": "seller_003",
+    "SellerName": "واحد تولیدی شیرآلات صنعتی",
+    "notes": "",
+    "date": 1735598400000,
     "Status": 0,
-    "totalAmount": 78000.0,
+    "totalAmount": 18500000.0,
     "paidAmount": 0.0,
     "paymentStatus": "unpaid",
     "deliveryStatus": "pending",
     "isSettled": false,
-    "Deliveries": [
-      {"id": 203, "date": 1734450000000, "count": 0, "totalWeight": 0.0},
-    ],
+    "Deliveries": [],
     "Items": [
-      {"id": 5, "name": "قوطی رنگ 1 لیتری", "quantity": 12, "price": 6500.0},
+      {
+        "id": 207,
+        "name": "شیر توپی تمام برنجی 1 اینچ",
+        "quantity": 500,
+        "price": 25000.0,
+      },
+      {
+        "id": 208,
+        "name": "شیر توپی تمام برنجی 1/2 اینچ",
+        "quantity": 800,
+        "price": 18000.0,
+      },
     ],
     "Payments": [],
   },
