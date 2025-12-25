@@ -52,20 +52,8 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
          payments: payments,
        );
 
-  // static int _toJson(DateTime value) => value.millisecondsSinceEpoch;
-  //
-  // static DateTime _fromJson(dynamic value) {
-  //   if (value is int) {
-  //     return DateTime.fromMillisecondsSinceEpoch(value);
-  //   } else if (value is String) {
-  //     return DateTime.parse(value);
-  //   }
-  //   return DateTime.now();
-  // }
-
   // تبدیل از JSON به مدل
   factory PurchaseInvoiceModel.fromJson(Map<String, dynamic> json) {
-    // تبدیل paymentStatus از String به enum
     PaymentStatus paymentStatus;
     switch (json['paymentStatus']) {
       case 'unpaid':

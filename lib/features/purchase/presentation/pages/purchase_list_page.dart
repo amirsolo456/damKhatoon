@@ -14,24 +14,30 @@ class PurchaseListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     final AppNotifier notifier = Provider.of<AppNotifier>(context);
     return BlocProvider(
        create: (BuildContext context) => sl<PurchaseBloc>()..add(LoadPurchasesEvent()),
+=======
+    return BlocProvider(
+      lazy: false,
+      create: (context) => sl<PurchaseBloc>()..add(LoadPurchasesEvent()),
+>>>>>>> 3c995f2a9a7bdc75699f3fac00fe4428adf8aef0
 
-      // create: (context) {
-      //   final bloc = sl<PurchaseBloc>();
-      //   bloc.add(LoadPurchasesEvent());
-      //   return bloc;
-      // },
       child: Scaffold(
         appBar: AppBar(title: const Text('لیست فاکتورهای خرید')),
-        body:const PurchaseListView(),
+        body: const PurchaseListView(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
               context,
+<<<<<<< HEAD
                MaterialPageRoute(
                 builder: (BuildContext context) => const CreatePurchasePage(),
+=======
+              MaterialPageRoute(
+                builder: (context) => const CreatePurchasePage(),
+>>>>>>> 3c995f2a9a7bdc75699f3fac00fe4428adf8aef0
               ),
             );
           },
@@ -41,5 +47,3 @@ class PurchaseListPage extends StatelessWidget {
     );
   }
 }
-
-
