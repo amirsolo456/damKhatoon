@@ -4,6 +4,7 @@ import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/payment.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/purchase_item.dart';
 
+
 class PurchaseInvoice extends Equatable {
   final int id;
   final String sellerId;
@@ -38,7 +39,7 @@ class PurchaseInvoice extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
     id,
     sellerId,
     sellerName,
@@ -101,25 +102,25 @@ class PurchaseInvoice extends Equatable {
       totalAmount: (json['totalAmount'] as num).toDouble(),
       paidAmount: (json['paidAmount'] as num).toDouble(),
       paymentStatus: PaymentStatus.values.firstWhere(
-        (e) => e.name == json['paymentStatus'],
+        (PaymentStatus e) => e.name == json['paymentStatus'],
         orElse: () => PaymentStatus.unpaid,
       ),
       deliveryStatus: DeliveryStatus.values.firstWhere(
-        (e) => e.name == json['deliveryStatus'],
+        (DeliveryStatus e) => e.name == json['deliveryStatus'],
         orElse: () => DeliveryStatus.pending,
       ),
       isSettled: json['isSettled'] ?? false,
       sellerName: json['SellerName'] ?? '',
       status: json['Status'] ?? 0,
-      deliveries: json['Deliveries'] ?? [],
-      payments: json['Payments'] ?? [],
-      items: json['Items'] ?? [],
+      deliveries: json['Deliveries'] ?? <Delivery>[],
+      payments: json['Payments'] ?? <Payment>[],
+      items: json['Items'] ?? <PurchaseItem>[],
       notes: '',
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    return <String, dynamic>{
       'Id': id,
       'SellerId': sellerId,
       'Date': date ,

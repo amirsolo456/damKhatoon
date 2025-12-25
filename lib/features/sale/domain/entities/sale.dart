@@ -1,7 +1,5 @@
 // مدل جامع‌تر
 import 'package:json_annotation/json_annotation.dart';
-import 'package:khatoon_container/features/purchase/data/datasources/purchase_remote_data_source.dart';
-import 'package:khatoon_container/features/purchase/data/repositories/purchase_repository_impl.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/delivery.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/order.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/payment.dart';

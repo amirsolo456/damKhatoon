@@ -15,5 +15,5 @@ class AnimalStrip extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, date, date, description, name];
+  List<Object?> get props => <Object?>[id, date, date, description, name];
 }

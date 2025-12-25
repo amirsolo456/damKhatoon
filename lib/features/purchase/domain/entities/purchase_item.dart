@@ -15,5 +15,5 @@ class PurchaseItem extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, name, quantity, price];
+  List<Object?> get props => <Object?>[id, name, quantity, price];
 }

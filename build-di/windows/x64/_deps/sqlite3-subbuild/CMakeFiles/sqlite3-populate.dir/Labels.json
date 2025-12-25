@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/sqlite3-populate"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/b3b8fa3bee867efab03ba55cc331e621/sqlite3-populate.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/59d370fe9f2f7643b0fafe21ace30d57/sqlite3-populate-complete.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/54d2667f211e6567635bd3de65b24e37/sqlite3-populate-build.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/54d2667f211e6567635bd3de65b24e37/sqlite3-populate-configure.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/54d2667f211e6567635bd3de65b24e37/sqlite3-populate-download.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/54d2667f211e6567635bd3de65b24e37/sqlite3-populate-install.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/54d2667f211e6567635bd3de65b24e37/sqlite3-populate-mkdir.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/54d2667f211e6567635bd3de65b24e37/sqlite3-populate-patch.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/54d2667f211e6567635bd3de65b24e37/sqlite3-populate-test.rule"
+		},
+		{
+			"file" : "X:/damKhatoon/build-di/windows/x64/_deps/sqlite3-subbuild/CMakeFiles/54d2667f211e6567635bd3de65b24e37/sqlite3-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"sqlite3-populate"
+		],
+		"name" : "sqlite3-populate"
+	}
+}

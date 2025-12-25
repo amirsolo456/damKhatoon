@@ -1,14 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
-import 'package:hive/hive.dart';
-import 'package:isar/isar.dart';
-import 'package:khatoon_container/core/storage/local_storage/isar/data/repositories/isar_provider.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/delivery_usecase.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/payment_usecase.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/purchase_item_usecase.dart';
-import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
 import 'package:khatoon_container/features/user/data/data_sources/user_local_data_source.dart';
-import 'package:khatoon_container/features/user/data/models/user_model/user_model.dart';
 import 'package:khatoon_container/features/user/data/repositories/user_repository.dart';
 import 'package:khatoon_container/features/user/domain/usecases/user_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +19,7 @@ import 'package:khatoon_container/features/purchase/domain/usecases/purchase_use
 // ... سایر usecase ها
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
 
-final sl = GetIt.instance;
+final GetIt sl = GetIt.instance;
 
 /// توابع کمکی برای ثبت سریع وابستگی‌ها
 extension GetItX on GetIt {
@@ -39,7 +34,7 @@ class InjectionContainer {
   static Future<void> init() async {
     // ====================== External ======================
     // SharedPreferences
-    final sharedPreferences = await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sl.lazySingleton<SharedPreferences>(() => sharedPreferences);
 
     // Dio
@@ -51,7 +46,7 @@ class InjectionContainer {
                 // آدرس پایه API خود را قرار دهید
                 connectTimeout: const Duration(seconds: 15),
                 receiveTimeout: const Duration(seconds: 15),
-                headers: {
+                headers: <String, dynamic>{
                   'Content-Type': 'application/json',
                   'Accept': 'application/json',
                 },

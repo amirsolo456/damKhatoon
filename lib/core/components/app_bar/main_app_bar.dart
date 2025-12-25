@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:khatoon_container/app_notifier.dart';
 import 'package:provider/provider.dart';
@@ -22,15 +21,15 @@ class _MainAppBarState extends State<MainAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final notifier = Provider.of<AppNotifier>(context);
+    final ThemeData theme = Theme.of(context);
+    final bool isDark = theme.brightness == Brightness.dark;
+    final AppNotifier notifier = Provider.of<AppNotifier>(context);
 
     return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final isXL = width >= xl;
-        final showSearch =
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double width = constraints.maxWidth;
+        final bool isXL = width >= xl;
+        final bool showSearch =
             width >=
             lg; // per HTML: search hidden on small, visible on xl:block => visible from lg+
         // HTML shows search in a div hidden xl:block -> that means visible on xl and up.
@@ -49,8 +48,7 @@ class _MainAppBarState extends State<MainAppBar> {
             ),
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               if (notifier.isLoading)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
@@ -164,7 +162,7 @@ class _MainAppBarState extends State<MainAppBar> {
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: <Widget>[
                   Text('⌘', style: TextStyle(fontSize: 12, height: 1.0)),
                   SizedBox(width: 4),
                   Text('K', style: TextStyle(fontSize: 12, height: 1.0)),

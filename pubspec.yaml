@@ -49,6 +49,8 @@ dependencies:
   provider: ^6.1.5+1
   flutter_svg: ^2.2.3
 
+  bloc: any
+  isar: any
 analyzer:
   exclude:
     - test/_data/p4/lib/lib1.dart
@@ -92,6 +94,8 @@ flutter:
     - assets\chat_dark.png
     - assets\user_profile.png
     - assets\user_profile_dark.png
+ 
+    
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/gestures/events.dart';
 import 'package:khatoon_container/core/components/menu/domain/entities/menu_item.dart';
 import 'package:provider/provider.dart';
 import 'package:khatoon_container/app_notifier.dart';
@@ -13,12 +13,12 @@ class ExpandableMenu extends StatelessWidget {
     MenuItem item,
     AppNotifier notifier,
   ) {
-    final hasChildren = item.children?.isNotEmpty ?? false;
-    final isExpanded = notifier.isExpanded(item.id);
-    final isSelected = notifier.selectedItemId == item.id;
-    final sidebarCollapsed = notifier.sidebarCollapsed;
+    final bool hasChildren = item.children?.isNotEmpty ?? false;
+    final bool isExpanded = notifier.isExpanded(item.id);
+    final bool isSelected = notifier.selectedItemId == item.id;
+    final bool sidebarCollapsed = notifier.sidebarCollapsed;
     return Column(
-      children: [
+      children: <Widget>[
         // Main Menu Item
         Container(
           // constraints: const BoxConstraints(minWidth: 20),
@@ -33,7 +33,6 @@ class ExpandableMenu extends StatelessWidget {
             border: isSelected
                 ? Border.all(
                     color: Theme.of(context).colorScheme.primary.withAlpha(300),
-                    width: 1,
                   )
                 : null,
           ),
@@ -55,7 +54,7 @@ class ExpandableMenu extends StatelessWidget {
                   vertical: 10,
                 ),
                 child: Row(
-                  children: [
+                  children: <Widget>[
                     // آیکون
                     Container(
                       width: 36,
@@ -77,7 +76,7 @@ class ExpandableMenu extends StatelessWidget {
                     ),
 
                     // متن (در حالت collapsed مخفی می‌شود)
-                    if (!sidebarCollapsed) ...[
+                    if (!sidebarCollapsed) ...<Widget>[
                       // const SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -100,7 +99,7 @@ class ExpandableMenu extends StatelessWidget {
                       ),
 
                       // فلش برای آیتم‌های دارای فرزند
-                      if (hasChildren) ...[
+                      if (hasChildren) ...<Widget>[
                         AnimatedRotation(
                           curve: Curves.easeInOut,
                           duration: const Duration(milliseconds: 300),
@@ -138,7 +137,7 @@ class ExpandableMenu extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: item.children!.map((child) {
+                  children: item.children!.map((MenuItem child) {
                     return _buildChildItem(context, child, notifier);
                   }).toList(),
                 ),
@@ -154,7 +153,7 @@ class ExpandableMenu extends StatelessWidget {
     MenuItem child,
     AppNotifier notifier,
   ) {
-    final isChildSelected = notifier.selectedItemId == child.id;
+    final bool isChildSelected = notifier.selectedItemId == child.id;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -174,13 +173,13 @@ class ExpandableMenu extends StatelessWidget {
             notifier.selectItem(child.id);
             if (!isRail) Navigator.pop(context);
           },
-          child:  Container(
+          child:  SizedBox(
             height: 30,
             // constraints: const BoxConstraints(minWidth: 1),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               spacing: 10,
-              children: [
+              children: <Widget>[
                 SafeArea(
                   minimum: const EdgeInsets.all(1),
                   child:  Icon(
@@ -223,7 +222,7 @@ class ExpandableMenu extends StatelessWidget {
   }
 
   Widget _buildFooter(BuildContext context, AppNotifier notifier) {
-    final sidebarCollapsed = notifier.sidebarCollapsed;
+    final bool sidebarCollapsed = notifier.sidebarCollapsed;
 
     return Container(
       height: 60,
@@ -236,7 +235,7 @@ class ExpandableMenu extends StatelessWidget {
       child: sidebarCollapsed
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 SafeArea(
                   minimum: const EdgeInsets.all(1),
                   child: IconButton(
@@ -256,7 +255,7 @@ class ExpandableMenu extends StatelessWidget {
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-              children: [
+              children: <Widget>[
                 const Spacer(),
                 SafeArea(
                   minimum: const EdgeInsets.all(1),
@@ -292,38 +291,37 @@ class ExpandableMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<AppNotifier>(context);
-    final sidebarCollapsed = notifier.sidebarCollapsed;
+    final AppNotifier notifier = Provider.of<AppNotifier>(context);
+    final bool sidebarCollapsed = notifier.sidebarCollapsed;
 
     return Consumer<AppNotifier>(
-      builder: (context, notifier, child) {
-        final menuItems = notifier.menuItems;
-        final menuContent = Column(
-          children: [
+      builder: (BuildContext context, AppNotifier notifier, Widget? child) {
+        final List<MenuItem> menuItems = notifier.menuItems;
+        final Column menuContent = Column(
+          children: <Widget>[
             const SizedBox(height: 16, width: 1),
             Expanded(
               child: MouseRegion(
-                onEnter: (event) {
+                onEnter: (PointerEnterEvent event) {
                   notifier.sidebarManually(false);
                 },
-                onExit: (event) {
+                onExit: (PointerExitEvent event) {
                   notifier.sidebarManually(true);
                 },
                 child: CustomScrollView(
-                  slivers: [
+                  slivers: <Widget>[
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       sliver: SliverList(
                         key: const Key('silver'),
                         delegate: SliverChildBuilderDelegate(
-                          (context, index) {
+                          (BuildContext context, int index) {
                             return _buildMenuItem(
                               context,
                               notifier.menuItems[index],
                               notifier,
                             );
                           },
-                          addAutomaticKeepAlives: true,
                           childCount: notifier.menuItems.length,
                         ),
                       ),
@@ -348,7 +346,6 @@ class ExpandableMenu extends StatelessWidget {
             border: Border(
               right: BorderSide(
                 color: Theme.of(context).dividerColor.withAlpha(50),
-                width: 1,
               ),
             ),
           ),

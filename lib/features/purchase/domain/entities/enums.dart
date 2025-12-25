@@ -21,7 +21,7 @@ enum DeliveryStatus { pending, shipped, delivered }
 enum UserRank { accountant, support, analyst, developer, assistant, user }
 
 class UserRankHelper {
-  static const Map<UserRank, int> _codes = {
+  static const Map<UserRank, int> _codes = <UserRank, int>{
     UserRank.accountant: 1,
     UserRank.support: 2,
     UserRank.analyst: 3,
@@ -30,8 +30,7 @@ class UserRankHelper {
     UserRank.user: 6,
   };
 
-
-  static const Map<UserRank, String> _persianNames = {
+  static const Map<UserRank, String> _persianNames = <UserRank, String>{
     UserRank.accountant: 'حسابدار',
     UserRank.support: 'پشتیبان',
     UserRank.analyst: 'تحلیلگر',
@@ -47,8 +46,8 @@ class UserRankHelper {
   static UserRank fromCode(int code) {
     return _codes.entries
         .firstWhere(
-          (entry) => entry.value == code,
-          orElse: () => MapEntry(UserRank.user, 6),
+          (MapEntry<UserRank, int> entry) => entry.value == code,
+          orElse: () => const MapEntry<UserRank, int>(UserRank.user, 6),
         )
         .key;
   }

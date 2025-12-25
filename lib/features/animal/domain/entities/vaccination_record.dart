@@ -29,5 +29,5 @@ class VaccinationRecord extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, vaccineName, date];
+  List<Object?> get props => <Object?>[id, vaccineName, date];
 }

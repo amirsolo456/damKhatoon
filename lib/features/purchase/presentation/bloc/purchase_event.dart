@@ -11,7 +11,7 @@ abstract class PurchaseEvent extends Equatable {
   const PurchaseEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }
 
 // ============ Purchase Invoice Events ============
@@ -25,7 +25,7 @@ class GetPurchaseByIdEvent extends PurchaseEvent {
   const GetPurchaseByIdEvent(this.id);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => <Object>[id];
 }
 
 // Create
@@ -35,7 +35,7 @@ class CreatePurchaseEvent extends PurchaseEvent {
   const CreatePurchaseEvent(this.invoice);
 
   @override
-  List<Object> get props => [invoice];
+  List<Object> get props => <Object>[invoice];
 }
 
 // Update
@@ -45,7 +45,7 @@ class UpdatePurchaseEvent extends PurchaseEvent {
   const UpdatePurchaseEvent(this.invoice);
 
   @override
-  List<Object> get props => [invoice];
+  List<Object> get props => <Object>[invoice];
 }
 
 // Delete
@@ -55,7 +55,7 @@ class DeletePurchaseEvent extends PurchaseEvent {
   const DeletePurchaseEvent(this.purchase);
 
   @override
-  List<Object> get props => [purchase.id];
+  List<Object> get props => <Object>[purchase.id];
 }
 
 // ============ Purchase Item Events ============
@@ -67,7 +67,7 @@ class GetPurchaseItemsEvent extends PurchaseEvent {
   const GetPurchaseItemsEvent(this.purchase);
 
   @override
-  List<Object> get props => [purchase.id];
+  List<Object> get props => <Object>[purchase.id];
 }
 
 // Create Purchase Item
@@ -78,7 +78,7 @@ class CreatePurchaseItemEvent extends PurchaseEvent {
   const CreatePurchaseItemEvent(this.purchase, this.item);
 
   @override
-  List<Object> get props => [purchase.id, item];
+  List<Object> get props => <Object>[purchase.id, item];
 }
 
 // Update Purchase Item
@@ -88,7 +88,7 @@ class UpdatePurchaseItemEvent extends PurchaseEvent {
   const UpdatePurchaseItemEvent(this.item);
 
   @override
-  List<Object> get props => [item];
+  List<Object> get props => <Object>[item];
 }
 
 // Delete Purchase Item
@@ -98,7 +98,7 @@ class DeletePurchaseItemEvent extends PurchaseEvent {
   const DeletePurchaseItemEvent(this.item);
 
   @override
-  List<Object> get props => [item.id];
+  List<Object> get props => <Object>[item.id];
 }
 
 // ============ Payment Events ============
@@ -110,7 +110,7 @@ class GetPaymentsEvent extends PurchaseEvent {
   const GetPaymentsEvent(this.invoice);
 
   @override
-  List<Object> get props => [invoice.id];
+  List<Object> get props => <Object>[invoice.id];
 }
 
 // Create Payment
@@ -121,7 +121,7 @@ class CreatePaymentEvent extends PurchaseEvent {
   const CreatePaymentEvent(this.invoice, this.payment);
 
   @override
-  List<Object> get props => [invoice.id, payment];
+  List<Object> get props => <Object>[invoice.id, payment];
 }
 
 // Update Payment
@@ -131,7 +131,7 @@ class UpdatePaymentEvent extends PurchaseEvent {
   const UpdatePaymentEvent(this.payment);
 
   @override
-  List<Object> get props => [payment];
+  List<Object> get props => <Object>[payment];
 }
 
 // Delete Payment
@@ -141,7 +141,7 @@ class DeletePaymentEvent extends PurchaseEvent {
   const DeletePaymentEvent(this.payment);
 
   @override
-  List<Object> get props => [payment.id];
+  List<Object> get props => <Object>[payment.id];
 }
 
 // ============ Order Events ============
@@ -153,7 +153,7 @@ class GetOrdersEvent extends PurchaseEvent {
   const GetOrdersEvent(this.purchase);
 
   @override
-  List<Object> get props => [purchase.id];
+  List<Object> get props => <Object>[purchase.id];
 }
 
 // Create Order
@@ -164,7 +164,7 @@ class CreateOrderEvent extends PurchaseEvent {
   const CreateOrderEvent(this.purchase, this.order);
 
   @override
-  List<Object> get props => [purchase.id, order];
+  List<Object> get props => <Object>[purchase.id, order];
 }
 
 // Update Order
@@ -174,7 +174,7 @@ class UpdateOrderEvent extends PurchaseEvent {
   const UpdateOrderEvent(this.order);
 
   @override
-  List<Object> get props => [order];
+  List<Object> get props => <Object>[order];
 }
 
 // Delete Order
@@ -184,7 +184,7 @@ class DeleteOrderEvent extends PurchaseEvent {
   const DeleteOrderEvent(this.order);
 
   @override
-  List<Object> get props => [order];
+  List<Object> get props => <Object>[order];
 }
 
 // ============ Delivery Events ============
@@ -196,7 +196,7 @@ class GetDeliveriesEvent extends PurchaseEvent {
   const GetDeliveriesEvent(this.purchase);
 
   @override
-  List<Object> get props => [purchase.id];
+  List<Object> get props => <Object>[purchase.id];
 }
 
 // Create Delivery
@@ -207,7 +207,7 @@ class CreateDeliveryEvent extends PurchaseEvent {
   const CreateDeliveryEvent(this.purchase, this.delivery);
 
   @override
-  List<Object> get props => [purchase.id, delivery];
+  List<Object> get props => <Object>[purchase.id, delivery];
 }
 
 // Update Delivery
@@ -217,7 +217,7 @@ class UpdateDeliveryEvent extends PurchaseEvent {
   const UpdateDeliveryEvent(this.delivery);
 
   @override
-  List<Object> get props => [delivery];
+  List<Object> get props => <Object>[delivery];
 }
 
 // Delete Delivery
@@ -227,5 +227,5 @@ class DeleteDeliveryEvent extends PurchaseEvent {
   const DeleteDeliveryEvent(this.delivery);
 
   @override
-  List<Object> get props => [delivery.id];
+  List<Object> get props => <Object>[delivery.id];
 }

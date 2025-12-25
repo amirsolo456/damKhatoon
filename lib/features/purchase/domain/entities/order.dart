@@ -28,5 +28,5 @@ class Order extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, date, quantity, totalWeight];
+  List<Object?> get props => <Object?>[id, date, quantity, totalWeight];
 }

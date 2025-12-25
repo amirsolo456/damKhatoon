@@ -17,9 +17,9 @@ class DioClient<T,D,C> {
   DioClient() {
     dio = Dio(BaseOptions(
       baseUrl: ApiConstants.baseUrl,
-      connectTimeout: Duration(milliseconds: ApiConstants.connectTimeout),
-      receiveTimeout: Duration(milliseconds: ApiConstants.receiveTimeout),
-      headers: {
+      connectTimeout: const Duration(milliseconds: ApiConstants.connectTimeout),
+      receiveTimeout: const Duration(milliseconds: ApiConstants.receiveTimeout),
+      headers: <String, dynamic>{
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
@@ -27,17 +27,14 @@ class DioClient<T,D,C> {
 
     // افزودن Interceptor برای لاگ کردن درخواست‌ها
     dio.interceptors.add(LogInterceptor(
-      request: true,
       requestBody: true,
       responseBody: true,
-      requestHeader: true,
       responseHeader: false,
-      error: true,
     ));
 
     // افزودن Interceptor برای هدرهای احراز هویت (اگر نیاز است)
     dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
+      onRequest: (RequestOptions options, RequestInterceptorHandler handler) async {
         // افزودن توکن احراز هویت اگر وجود دارد
         // final token = await GetIt.instance<AuthService>().getToken();
         // if (token != null) {
@@ -45,7 +42,7 @@ class DioClient<T,D,C> {
         // }
         return handler.next(options);
       },
-      onError: (DioException e, handler) {
+      onError: (DioException e, ErrorInterceptorHandler handler) {
         // مدیریت خطاهای سراسری
         return handler.next(e);
       },

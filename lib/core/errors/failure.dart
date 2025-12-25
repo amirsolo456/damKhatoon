@@ -7,17 +7,17 @@ abstract class Failure extends Equatable {
   const Failure(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => <Object>[message];
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure([String message = 'خطا در ارتباط با سرور']) : super(message);
+  const ServerFailure([super.message = 'خطا در ارتباط با سرور']);
 }
 
 class CacheFailure extends Failure {
-  const CacheFailure([String message = 'خطا در ذخیره‌سازی محلی']) : super(message);
+  const CacheFailure([super.message = 'خطا در ذخیره‌سازی محلی']);
 }
 
 class NetworkFailure extends Failure {
-  const NetworkFailure([String message = 'خطا در اتصال به اینترنت']) : super(message);
+  const NetworkFailure([super.message = 'خطا در اتصال به اینترنت']);
 }

@@ -92,7 +92,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
   @override
   Future<List<PurchaseInvoiceModel>> getPurchases() async {
     try {
-      final response = await dioClient.get('/purchases');
+      final Response<dynamic> response = await dioClient.get('/purchases');
       final List<dynamic> data = response.data;
       return data.map((json) => PurchaseInvoiceModel.fromJson(json)).toList();
     } on DioException catch (e) {
@@ -105,7 +105,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
     PurchaseInvoiceModel purchase,
   ) async {
     try {
-      final response = await dioClient.post(
+      final Response<dynamic> response = await dioClient.post(
         '/purchases',
         data: purchase.toJson(),
       );
@@ -120,7 +120,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
     PurchaseInvoiceModel purchase,
   ) async {
     try {
-      final response = await dioClient.put(
+      final Response<dynamic> response = await dioClient.put(
         '/purchases/${purchase.id}',
         data: purchase.toJson(),
       );
@@ -158,7 +158,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
     PaymentModel payment,
   ) async {
     try {
-      final response = await dioClient.post(
+      final Response<dynamic> response = await dioClient.post(
         '/purchases/${purchase.id}/payments',
         data: payment.toJson(),
       );
@@ -173,7 +173,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
     List<PaymentModel> payments,
   ) async {
     try {
-      final response = await dioClient.post(
+      final Response<dynamic> response = await dioClient.post(
         '/purchases/${purchase.id}/payments',
         data: payments,
       );
@@ -185,7 +185,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
   @override
   Future<List<PaymentModel>> getPaymentsByPurchaseId(int purchaseId) async {
     try {
-      final response = await dioClient.get('/purchases/$purchaseId/payments');
+      final Response<dynamic> response = await dioClient.get('/purchases/$purchaseId/payments');
       final List<dynamic> data = response.data;
       return data.map((json) => PaymentModel.fromJson(json)).toList();
     } on DioException catch (e) {
@@ -199,7 +199,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
     DeliveryModel delivery,
   ) async {
     try {
-      final response = await dioClient.post(
+      final Response<dynamic> response = await dioClient.post(
         '/purchases/$purchaseId/deliveries',
         data: delivery.toJson(),
       );
@@ -211,7 +211,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
   @override
   Future<List<DeliveryModel>> getDeliveriesByPurchaseId(int purchaseId) async {
     try {
-      final response = await dioClient.get('/purchases/$purchaseId/deliveries');
+      final Response<dynamic> response = await dioClient.get('/purchases/$purchaseId/deliveries');
       final List<dynamic> data = response.data;
       return data.map((json) => DeliveryModel.fromJson(json)).toList();
     } on DioException catch (e) {
@@ -222,7 +222,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
   @override
   Future<void> createItem(int purchaseId, PurchaseItemModel item) async {
     try {
-      final response = await dioClient.post(
+      final Response<dynamic> response = await dioClient.post(
         '/purchases/$purchaseId/items',
         data: item.toJson(),
       );
@@ -237,7 +237,7 @@ class PurchaseRemoteDataSource implements IPurchaseRemoteDataSource {
     int purchaseId,
   ) async {
     try {
-      final response = await dioClient.get('/purchases/$purchaseId/items');
+      final Response<dynamic> response = await dioClient.get('/purchases/$purchaseId/items');
       final List<dynamic> data = response.data;
       return data.map((json) => PurchaseItemModel.fromJson(json)).toList();
     } on DioException catch (e) {

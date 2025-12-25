@@ -14,13 +14,13 @@ class SignInPage extends StatelessWidget {
         child: isSmallScreen
             ? const Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [_Logo(), _FormContent()],
+                children: <Widget>[_Logo(), _FormContent()],
               )
             : Container(
                 padding: const EdgeInsets.all(32.0),
                 constraints: const BoxConstraints(maxWidth: 800),
                 child: const Row(
-                  children: [
+                  children: <Widget>[
                     Expanded(child: _Logo()),
                     Expanded(child: Center(child: _FormContent())),
                   ],
@@ -40,7 +40,7 @@ class _Logo extends StatelessWidget {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
+      children: <Widget>[
         FlutterLogo(size: isSmallScreen ? 100 : 200),
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -76,7 +76,7 @@ class __FormContentState extends State<_FormContent> {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<AppNotifier>(context);
+    final AppNotifier notifier = Provider.of<AppNotifier>(context);
     return Container(
       constraints: const BoxConstraints(maxWidth: 300),
       child: Form(
@@ -84,15 +84,15 @@ class __FormContentState extends State<_FormContent> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             TextFormField(
-              validator: (value) {
+              validator: (String? value) {
                 // add email validation
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';
                 }
 
-                bool emailValid = RegExp(
+                final bool emailValid = RegExp(
                   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                 ).hasMatch(value);
                 if (!emailValid) {
@@ -110,7 +110,7 @@ class __FormContentState extends State<_FormContent> {
             ),
             _gap(),
             TextFormField(
-              validator: (value) {
+              validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';
                 }
@@ -143,7 +143,7 @@ class __FormContentState extends State<_FormContent> {
             _gap(),
             CheckboxListTile(
               value: _rememberMe,
-              onChanged: (value) {
+              onChanged: (bool? value) {
                 if (value == null) return;
                 setState(() {
                   _rememberMe = value;

@@ -24,5 +24,5 @@ class MilkingRecord extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, date, time];
+  List<Object?> get props => <Object?>[id, date, time];
 }

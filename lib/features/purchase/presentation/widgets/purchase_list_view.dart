@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khatoon_container/features/purchase/data/models/purchase_invoice/purchase_invoice_model.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_state.dart';
@@ -15,7 +16,7 @@ class _PurchaseListViewState extends State<PurchaseListView> {
     super.initState();
     // فقط اگر bloc هنوز close نشده باشد event ارسال می‌کند
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final bloc = context.read<PurchaseBloc>();
+      final PurchaseBloc bloc = context.read<PurchaseBloc>();
       if (!bloc.isClosed) {
         bloc.add(LoadPurchasesEvent());
       }
@@ -25,7 +26,7 @@ class _PurchaseListViewState extends State<PurchaseListView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PurchaseBloc, PurchaseState>(
-      builder: (context, state) {
+      builder: (BuildContext context, PurchaseState state) {
         if (state is PurchaseLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -35,7 +36,7 @@ class _PurchaseListViewState extends State<PurchaseListView> {
         }
 
         if (state is PurchasesLoadedState) {
-          final invoices = state.invoices;
+          final List<PurchaseInvoiceModel> invoices = state.invoices;
 
           if (invoices.isEmpty) {
             return const Center(child: Text('هیچ فاکتور خریدی ثبت نشده است'));
@@ -43,8 +44,8 @@ class _PurchaseListViewState extends State<PurchaseListView> {
 
           return ListView.builder(
             itemCount: invoices.length,
-            itemBuilder: (context, index) {
-              final invoice = invoices[index];
+            itemBuilder: (BuildContext context, int index) {
+              final PurchaseInvoiceModel invoice = invoices[index];
               return Card(
                 margin: const EdgeInsets.all(8.0),
                 child: ListTile(

@@ -49,14 +49,14 @@ class Payment extends Equatable {
       paymentStatus: json['PaymentStatus'] as PaymentStatus,
       deliveryStatus: json['DeliveryStatus'] as DeliveryStatus,
       isSettled: json['IsSettled'] as bool ?? false,
-      deliveries: [],
-      items: [],
-      payments: [],
+      deliveries: <Delivery>[],
+      items: <PurchaseItem>[],
+      payments: <Payment>[],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id};
+    return <String, dynamic>{'id': id};
   }
 
   Payment toEntity() {

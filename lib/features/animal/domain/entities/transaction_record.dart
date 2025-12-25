@@ -24,5 +24,5 @@ class TransactionRecord extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, date, type, price];
+  List<Object?> get props => <Object?>[id, date, type, price];
 }

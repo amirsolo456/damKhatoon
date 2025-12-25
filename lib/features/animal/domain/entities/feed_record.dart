@@ -25,5 +25,5 @@ class FeedRecord extends Equatable {
   double get totalCost => amount * (unitPrice ?? 0);
 
   @override
-  List<Object?> get props => [id, date, feedType];
+  List<Object?> get props => <Object?>[id, date, feedType];
 }

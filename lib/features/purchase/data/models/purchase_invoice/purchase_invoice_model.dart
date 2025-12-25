@@ -1,30 +1,38 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:khatoon_container/features/purchase/domain/entities/enums.dart';
-import '../../../domain/entities/purchase_invoice.dart';
-import '../payment/payment_model.dart';
-import '../delivery/delivery_model.dart';
-import '../purchase_item/purchase_item_model.dart';
+import 'package:khatoon_container/features/purchase/domain/entities/purchase_invoice.dart';
+import 'package:khatoon_container/features/purchase/data/models/payment/payment_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/delivery/delivery_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/purchase_item/purchase_item_model.dart';
 
 part 'purchase_invoice_model.g.dart';
 
 @JsonSerializable()
 class PurchaseInvoiceModel extends PurchaseInvoice {
+  @override
   final List<DeliveryModel> deliveries;
+  @override
   final List<PurchaseItemModel> items;
+  @override
   final List<PaymentModel> payments;
+  @override
   final String sellerId;
+  @override
   final String sellerName;
+  @override
   final String notes;
+  @override
   final double totalAmount;
+  @override
   final double paidAmount;
 
   const PurchaseInvoiceModel({
-    required int id,
-    required int date,
-    required int status,
-    @JsonEnum(alwaysCreate: true) required PaymentStatus paymentStatus,
-    @JsonEnum(alwaysCreate: true) required DeliveryStatus deliveryStatus,
-    required bool isSettled,
+    required super.id,
+    required super.date,
+    required super.status,
+    @JsonEnum(alwaysCreate: true) required super.paymentStatus,
+    @JsonEnum(alwaysCreate: true) required super.deliveryStatus,
+    required super.isSettled,
     required this.deliveries,
     required this.items,
     required this.payments,
@@ -34,17 +42,11 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
     required this.totalAmount,
     required this.paidAmount,
   }) : super(
-         id: id,
          sellerId: sellerId,
          sellerName: sellerName,
          notes: notes,
-         date: date,
-         status: status,
          totalAmount: totalAmount,
          paidAmount: paidAmount,
-         paymentStatus: paymentStatus,
-         deliveryStatus: deliveryStatus,
-         isSettled: isSettled,
          deliveries: deliveries,
          items: items,
          payments: payments,
@@ -96,7 +98,7 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
     }
 
     // تبدیل payments از لیست JSON
-    List<PaymentModel> payments = [];
+    List<PaymentModel> payments = <PaymentModel>[];
     if (json['Payments'] != null && json['Payments'] is List) {
       payments = (json['Payments'] as List)
           .map((paymentJson) => PaymentModel.fromJson(paymentJson))
@@ -104,7 +106,7 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
     }
 
     // تبدیل deliveries از لیست JSON
-    List<DeliveryModel> deliveries = [];
+    List<DeliveryModel> deliveries = <DeliveryModel>[];
     if (json['Deliveries'] != null && json['Deliveries'] is List) {
       deliveries = (json['Deliveries'] as List)
           .map((deliveryJson) => DeliveryModel.fromJson(deliveryJson))
@@ -112,7 +114,7 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
     }
 
     // تبدیل items از لیست JSON
-    List<PurchaseItemModel> items = [];
+    List<PurchaseItemModel> items = <PurchaseItemModel>[];
     if (json['Items'] != null && json['Items'] is List) {
       items = (json['Items'] as List)
           .map((itemJson) => PurchaseItemModel.fromJson(itemJson))
@@ -140,7 +142,7 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
   // تبدیل از مدل به JSON
   @override
   Map<String, dynamic> toJson() {
-    return {
+    return <String, dynamic>{
       'id': id,
       'sellerId': sellerId,
       'SellerName': sellerName,
@@ -152,9 +154,9 @@ class PurchaseInvoiceModel extends PurchaseInvoice {
       'paymentStatus': paymentStatus.toString().split('.').last,
       'deliveryStatus': deliveryStatus.toString().split('.').last,
       'isSettled': isSettled,
-      'Deliveries': deliveries.map((d) => d).toList(),
-      'Items': items.map((i) => i).toList(),
-      'Payments': payments.map((p) => p.toJson()).toList(),
+      'Deliveries': deliveries.map((DeliveryModel d) => d).toList(),
+      'Items': items.map((PurchaseItemModel i) => i).toList(),
+      'Payments': payments.map((PaymentModel p) => p.toJson()).toList(),
     };
   }
 }

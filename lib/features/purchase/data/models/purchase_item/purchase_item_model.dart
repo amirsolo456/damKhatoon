@@ -1,18 +1,13 @@
 // features/purchase/data/models/purchase_item_model.dart
-import '../../../domain/entities/purchase_item.dart';
+import 'package:khatoon_container/features/purchase/domain/entities/purchase_item.dart';
 
 class PurchaseItemModel extends PurchaseItem {
   const PurchaseItemModel({
-    required int id,
-    required String name,
-    required int quantity,
-    required double price,
-  }) : super(
-    id: id,
-    name: name,
-    quantity: quantity,
-    price: price,
-  );
+    required super.id,
+    required super.name,
+    required super.quantity,
+    required super.price,
+  });
 
   factory PurchaseItemModel.fromJson(Map<String, dynamic> json) {
     return PurchaseItemModel(
@@ -24,7 +19,7 @@ class PurchaseItemModel extends PurchaseItem {
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    return <String, dynamic>{
       'id': id,
       'name': name,
       'quantity': quantity,

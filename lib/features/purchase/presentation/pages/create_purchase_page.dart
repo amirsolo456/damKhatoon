@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
@@ -9,7 +8,7 @@ class CreatePurchasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // استفاده از همان بلوک صفحه لیست
-    final purchaseBloc = context.read<PurchaseBloc>();
+    final PurchaseBloc purchaseBloc = context.read<PurchaseBloc>();
 
     return Scaffold(
       appBar: AppBar(
@@ -22,7 +21,7 @@ class CreatePurchasePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: [
+          children: <Widget>[
             // فرم ایجاد فاکتور اینجا قرار می‌گیرد
             // ...
             const SizedBox(height: 20),

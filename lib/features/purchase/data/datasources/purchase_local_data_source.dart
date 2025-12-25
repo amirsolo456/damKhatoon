@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:khatoon_container/features/purchase/data/models/delivery/delivery_model.dart';
 import 'package:khatoon_container/features/purchase/data/models/payment/payment_model.dart';
-import 'package:khatoon_container/features/purchase/data/models/purchase_item/purchase_item_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khatoon_container/core/errors/exceptions.dart';
 import 'package:khatoon_container/features/purchase/data/models/purchase_invoice/purchase_invoice_model.dart';
@@ -67,7 +66,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<void> createInvoice(PurchaseInvoiceModel invoice) async {
     try {
-      final invoices = await getCachedInvoices();
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
       invoices.add(invoice);
       await _saveInvoices(invoices);
     } catch (e) {
@@ -78,8 +77,8 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<List<PurchaseInvoiceModel>> getCachedInvoices() async {
     try {
-      final jsonString = sharedPreferences.getString(_invoicesKey);
-      if (jsonString == null) return [];
+      final String? jsonString = sharedPreferences.getString(_invoicesKey);
+      if (jsonString == null) return <PurchaseInvoiceModel>[];
 
       final List<dynamic> jsonList = json.decode(jsonString);
       return jsonList
@@ -93,8 +92,8 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<PurchaseInvoiceModel?> getInvoiceById(int id) async {
     try {
-      final invoices = await getCachedInvoices();
-      return invoices.firstWhere((invoice) => invoice.id == id);
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
+      return invoices.firstWhere((PurchaseInvoiceModel invoice) => invoice.id == id);
     } catch (e) {
       throw CacheException(message: 'خطا در پیدا کردن فاکتور');
     }
@@ -103,9 +102,9 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<void> updateInvoice(PurchaseInvoiceModel updatedInvoice) async {
     try {
-      final invoices = await getCachedInvoices();
-      final index = invoices.indexWhere(
-        (invoice) => invoice.id == updatedInvoice.id,
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
+      final int index = invoices.indexWhere(
+        (PurchaseInvoiceModel invoice) => invoice.id == updatedInvoice.id,
       );
 
       if (index != -1) {
@@ -120,8 +119,8 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<void> removeInvoice(int id) async {
     try {
-      final invoices = await getCachedInvoices();
-      invoices.removeWhere((invoice) => invoice.id == id);
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
+      invoices.removeWhere((PurchaseInvoiceModel invoice) => invoice.id == id);
       await _saveInvoices(invoices);
     } catch (e) {
       throw CacheException(message: 'خطا در حذف فاکتور از کش محلی');
@@ -147,8 +146,8 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   }
 
   Future<void> _saveInvoices(List<PurchaseInvoiceModel> invoices) async {
-    final jsonList = invoices.map((invoice) => invoice.toJson()).toList();
-    final jsonString = json.encode(jsonList);
+    final List<Map<String, dynamic>> jsonList = invoices.map((PurchaseInvoiceModel invoice) => invoice.toJson()).toList();
+    final String jsonString = json.encode(jsonList);
     await sharedPreferences.setString(_invoicesKey, jsonString);
   }
 
@@ -157,7 +156,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<void> createPayment(int invoiceId, PaymentModel payment) async {
     try {
-      final payments = await getCachedPayments(invoiceId);
+      final List<PaymentModel> payments = await getCachedPayments(invoiceId);
       payments.add(payment);
       await _savePayments(invoiceId, payments);
     } catch (e) {
@@ -173,9 +172,9 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<List<PaymentModel>> getCachedPayments(int invoiceId) async {
     try {
-      final key = '${_paymentsKeyPrefix}$invoiceId';
-      final jsonString = sharedPreferences.getString(key);
-      if (jsonString == null) return [];
+      final String key = '$_paymentsKeyPrefix$invoiceId';
+      final String? jsonString = sharedPreferences.getString(key);
+      if (jsonString == null) return <PaymentModel>[];
 
       final List<dynamic> jsonList = json.decode(jsonString);
       return jsonList.map((json) => PaymentModel.fromJson(json)).toList();
@@ -187,14 +186,13 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<PaymentModel?> getPaymentById(int paymentId) async {
     try {
-      final invoices = await getCachedInvoices();
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
 
-      for (final invoice in invoices) {
-          PaymentModel payment = invoice.payments.firstWhere(
-              (p) => p.id == paymentId,
-        ) as PaymentModel;
-        if (payment != null) return payment;
-        else return null;
+      for (final PurchaseInvoiceModel invoice in invoices) {
+          final PaymentModel payment = invoice.payments.firstWhere(
+              (PaymentModel p) => p.id == paymentId,
+        );
+        return payment;
       }
       return null;
     } catch (e) {
@@ -206,20 +204,20 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   Future<void> updatePayment(PaymentModel updatedPayment) async {
     try {
       // Get all invoices
-      final invoices = await getCachedInvoices();
-      var found = false;
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
+      bool found = false;
 
-      for (final invoice in invoices) {
-        final index = invoice.payments.indexWhere(
-          (p) => p.id == updatedPayment.id,
+      for (final PurchaseInvoiceModel invoice in invoices) {
+        final int index = invoice.payments.indexWhere(
+          (PaymentModel p) => p.id == updatedPayment.id,
         );
         if (index != -1) {
           // Create a new list with updated payment
-          final updatedPayments = List<PaymentModel>.from(invoice.payments);
+          final List<PaymentModel> updatedPayments = List<PaymentModel>.from(invoice.payments);
           updatedPayments[index] = updatedPayment;
 
           // Update invoice with new payments list
-          final updatedInvoice = PurchaseInvoiceModel(
+          final PurchaseInvoiceModel updatedInvoice = PurchaseInvoiceModel(
             id: invoice.id,
             sellerId: invoice.sellerId,
             sellerName: invoice.sellerName,
@@ -231,8 +229,8 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
             paymentStatus: invoice.paymentStatus,
             deliveryStatus: invoice.deliveryStatus,
             isSettled: invoice.isSettled,
-            deliveries: invoice.deliveries as List<DeliveryModel>,
-            items: invoice.items as  List<PurchaseItemModel>,
+            deliveries: invoice.deliveries,
+            items: invoice.items,
             payments: updatedPayments,
           );
 
@@ -255,20 +253,20 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   Future<void> removePayment(int paymentId) async {
     try {
       // Get all invoices
-      final invoices = await getCachedInvoices();
-      var found = false;
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
+      bool found = false;
 
-      for (final invoice in invoices) {
-        final paymentIndex = invoice.payments.indexWhere(
-          (p) => p.id == paymentId,
+      for (final PurchaseInvoiceModel invoice in invoices) {
+        final int paymentIndex = invoice.payments.indexWhere(
+          (PaymentModel p) => p.id == paymentId,
         );
         if (paymentIndex != -1) {
           // Create a new list without the payment
-          final updatedPayments = List<PaymentModel>.from(invoice.payments);
+          final List<PaymentModel> updatedPayments = List<PaymentModel>.from(invoice.payments);
           updatedPayments.removeAt(paymentIndex);
 
           // Update invoice with new payments list
-          final updatedInvoice = PurchaseInvoiceModel(
+          final PurchaseInvoiceModel updatedInvoice = PurchaseInvoiceModel(
             id: invoice.id,
             sellerId: invoice.sellerId,
             sellerName: invoice.sellerName,
@@ -280,8 +278,8 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
             paymentStatus: invoice.paymentStatus,
             deliveryStatus: invoice.deliveryStatus,
             isSettled: invoice.isSettled,
-            deliveries: invoice.deliveries as List<DeliveryModel>,
-            items: invoice.items as List<PurchaseItemModel>,
+            deliveries: invoice.deliveries,
+            items: invoice.items,
             payments: updatedPayments,
           );
 
@@ -303,7 +301,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<void> clearPayments(int invoiceId) async {
     try {
-      final key = '${_paymentsKeyPrefix}$invoiceId';
+      final String key = '$_paymentsKeyPrefix$invoiceId';
       await sharedPreferences.remove(key);
     } catch (e) {
       throw CacheException(message: 'خطا در پاک کردن پرداخت‌ها');
@@ -314,9 +312,9 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
       int invoiceId,
     List<PaymentModel> payments,
   ) async {
-    final key = '${_paymentsKeyPrefix}$invoiceId';
-    final jsonList = payments.map((payment) => payment.toJson()).toList();
-    final jsonString = json.encode(jsonList);
+    final String key = '$_paymentsKeyPrefix$invoiceId';
+    final List<Map<String, dynamic>> jsonList = payments.map((PaymentModel payment) => payment.toJson()).toList();
+    final String jsonString = json.encode(jsonList);
     await sharedPreferences.setString(key, jsonString);
   }
 
@@ -325,7 +323,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<void> createDelivery(int invoiceId, DeliveryModel delivery) async {
     try {
-      final deliveries = await getCachedDeliveries(invoiceId);
+      final List<DeliveryModel> deliveries = await getCachedDeliveries(invoiceId);
       deliveries.add(delivery);
       await _saveDeliveries(invoiceId, deliveries);
     } catch (e) {
@@ -341,9 +339,9 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<List<DeliveryModel>> getCachedDeliveries(int invoiceId) async {
     try {
-      final key = '${_deliveriesKeyPrefix}$invoiceId';
-      final jsonString = sharedPreferences.getString(key);
-      if (jsonString == null) return [];
+      final String key = '$_deliveriesKeyPrefix$invoiceId';
+      final String? jsonString = sharedPreferences.getString(key);
+      if (jsonString == null) return <DeliveryModel>[];
 
       final List<dynamic> jsonList = json.decode(jsonString);
       return jsonList.map((json) => DeliveryModel.fromJson(json)).toList();
@@ -355,12 +353,12 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<DeliveryModel?> getDeliveryById(int deliveryId) async {
     try {
-      final invoices = await getCachedInvoices();
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
 
-      for (final invoice in invoices) {
-        for (final delivery in invoice.deliveries) {
+      for (final PurchaseInvoiceModel invoice in invoices) {
+        for (final DeliveryModel delivery in invoice.deliveries) {
           if (delivery.id == deliveryId) {
-            return delivery as DeliveryModel;
+            return delivery;
           }
         }
       }
@@ -378,9 +376,9 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
       await removeDelivery(updatedDelivery.id);
 
       // Find which invoice this delivery belongs to
-      final invoices = await getCachedInvoices();
-      for (final invoice in invoices) {
-        if (invoice.deliveries.any((d) => d.id == updatedDelivery.id)) {
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
+      for (final PurchaseInvoiceModel invoice in invoices) {
+        if (invoice.deliveries.any((DeliveryModel d) => d.id == updatedDelivery.id)) {
           await createDelivery(invoice.id, updatedDelivery);
           break;
         }
@@ -394,21 +392,21 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   Future<void> removeDelivery(int deliveryId) async {
     try {
       // Similar to removePayment logic
-      final invoices = await getCachedInvoices();
+      final List<PurchaseInvoiceModel> invoices = await getCachedInvoices();
 
-      for (final invoice in invoices) {
-        final deliveryIndex = invoice.deliveries.indexWhere(
-          (d) => d.id == deliveryId,
+      for (final PurchaseInvoiceModel invoice in invoices) {
+        final int deliveryIndex = invoice.deliveries.indexWhere(
+          (DeliveryModel d) => d.id == deliveryId,
         );
         if (deliveryIndex != -1) {
           // Create a new list without the delivery
-          final updatedDeliveries = List<DeliveryModel>.from(
+          final List<DeliveryModel> updatedDeliveries = List<DeliveryModel>.from(
             invoice.deliveries,
           );
           updatedDeliveries.removeAt(deliveryIndex);
 
           // Update invoice
-          final updatedInvoice = PurchaseInvoiceModel(
+          final PurchaseInvoiceModel updatedInvoice = PurchaseInvoiceModel(
             id: invoice.id,
             sellerId: invoice.sellerId,
             sellerName: invoice.sellerName,
@@ -421,8 +419,8 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
             deliveryStatus: invoice.deliveryStatus,
             isSettled: invoice.isSettled,
             deliveries: updatedDeliveries,
-            items: invoice.items as List<PurchaseItemModel>,
-            payments: invoice.payments  as List<PaymentModel>,
+            items: invoice.items,
+            payments: invoice.payments,
           );
 
           await updateInvoice(updatedInvoice);
@@ -437,7 +435,7 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
   @override
   Future<void> clearDeliveries(int invoiceId) async {
     try {
-      final key = '${_deliveriesKeyPrefix}$invoiceId';
+      final String key = '$_deliveriesKeyPrefix$invoiceId';
       await sharedPreferences.remove(key);
     } catch (e) {
       throw CacheException(message: 'خطا در پاک کردن تحویل‌ها');
@@ -448,9 +446,9 @@ class PurchaseLocalDataSource implements IPurchaseLocalDataSource {
       int invoiceId,
     List<DeliveryModel> deliveries,
   ) async {
-    final key = '${_deliveriesKeyPrefix}$invoiceId';
-    final jsonList = deliveries.map((delivery) => delivery.toJson()).toList();
-    final jsonString = json.encode(jsonList);
+    final String key = '$_deliveriesKeyPrefix$invoiceId';
+    final List<Map<String, dynamic>> jsonList = deliveries.map((DeliveryModel delivery) => delivery.toJson()).toList();
+    final String jsonString = json.encode(jsonList);
     await sharedPreferences.setString(key, jsonString);
   }
 }

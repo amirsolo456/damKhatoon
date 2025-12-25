@@ -1,11 +1,14 @@
 import 'package:bloc/bloc.dart';
+import 'package:khatoon_container/features/purchase/data/models/delivery/delivery_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/order/order_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/payment/payment_model.dart';
 import 'package:khatoon_container/features/purchase/data/models/purchase_invoice/purchase_invoice_model.dart';
+import 'package:khatoon_container/features/purchase/data/models/purchase_item/purchase_item_model.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/delivery_usecase.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/order_usecase.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/payment_usecase.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/purchase_item_usecase.dart';
 import 'package:khatoon_container/features/purchase/domain/usecases/purchase_usecase.dart';
-import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_state.dart';
 
@@ -118,8 +121,8 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
     try {
       //final invoices = await getPurchasesUseCase.execute();
 
-      final invoices = fakeJsonList
-          .map((j) => PurchaseInvoiceModel.fromJson(j))
+      final List<PurchaseInvoiceModel> invoices = fakeJsonList
+          .map((Map<String, Object> j) => PurchaseInvoiceModel.fromJson(j))
           .toList();
       emit(PurchasesLoadedState(invoices));
     } catch (e) {
@@ -133,7 +136,7 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
   ) async {
     emit(PurchaseLoading());
     try {
-      final invoice = await getPurchasesByIdUseCase.execute(event.id);
+      final List<PurchaseInvoiceModel> invoice = await getPurchasesByIdUseCase.execute(event.id);
       emit(PurchaseByIdLoaded(invoice));
     } catch (e) {
       emit(PurchaseErrorState('خطا در دریافت فاکتور: ${e.toString()}'));
@@ -190,7 +193,7 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
   ) async {
     emit(PurchaseItemsLoading());
     try {
-      final items = await getPurchasesItemsUseCase.execute(event.purchase);
+      final List<PurchaseItemModel> items = await getPurchasesItemsUseCase.execute(event.purchase);
       emit(PurchaseItemsLoadedState(items));
     } catch (e) {
       emit(PurchaseErrorState('خطا در دریافت آیتم‌های خرید: ${e.toString()}'));
@@ -243,7 +246,7 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
   ) async {
     emit(PaymentsLoading());
     try {
-      final payments = await getPaymentsUseCase.execute(event.invoice);
+      final List<PaymentModel> payments = await getPaymentsUseCase.execute(event.invoice);
       emit(PaymentsLoadedState(payments));
     } catch (e) {
       emit(PurchaseErrorState('خطا در دریافت پرداخت‌ها: ${e.toString()}'));
@@ -296,7 +299,7 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
   ) async {
     emit(OrdersLoading());
     try {
-      final orders = await getOrdersUseCase.execute(event.purchase);
+      final List<OrderModel> orders = await getOrdersUseCase.execute(event.purchase);
       emit(OrdersLoadedState(orders));
     } catch (e) {
       emit(PurchaseErrorState('خطا در دریافت سفارش‌ها: ${e.toString()}'));
@@ -349,7 +352,7 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
   ) async {
     emit(DeliveriesLoading());
     try {
-      final deliveries = await getDeliveriesUseCase.execute(event.purchase);
+      final List<DeliveryModel> deliveries = await getDeliveriesUseCase.execute(event.purchase);
       emit(DeliveriesLoadedState(deliveries));
     } catch (e) {
       emit(PurchaseErrorState('خطا در دریافت تحویل‌ها: ${e.toString()}'));
@@ -396,123 +399,178 @@ class PurchaseBloc extends Bloc<PurchaseEvent, PurchaseState> {
   }
 }
 
-final fakeJsonList = [
-  {
-    "id": 1001,
-    "sellerId": "S-001",
-    "SellerName": "تهران تأمین",
-    "notes": "اولین فاکتور - تحویل کامل شده",
-    "date": "2025-12-15T10:30:00Z",
-    "Status": '1',
-    "totalAmount": 125000.0,
-    "paidAmount": 125000.0,
-    "paymentStatus": "paid",
-    "deliveryStatus": "delivered",
-    "isSettled": true,
-    "Deliveries": [
-      {"id": 201, "date": 1734306600000, "count": 2, "totalWeight": 12.5},
-    ],
-    "Items": [
-      {"id": 1, "name": "گوشه کابینت", "quantity": 5, "price": 10000.0},
-      {"id": 2, "name": "یراق پیچ", "quantity": 10, "price": 2500.0},
-    ],
-    "Payments": [
-      {
-        "id": 5001,
-        "date": 1734308400000,
-        "method": "card",
-        "sellerId": '1',
-        "sellerName": "تهران تأمین",
-        "status": 1,
-        "totalAmount": 125000.0,
-        "paidAmount": 125000.0,
-        "paymentStatus": "paid",
-        "deliveryStatus": "delivered",
-        "isSettled": true,
-        "notes": "پرداخت کامل با کارت",
-        "Deliveries": [],
-        "Items": [],
-        "Payments": [],
-      },
-    ],
-  },
-
-  {
-    "id": 1002,
-    "sellerId": "S-002",
-    "SellerName": "صنایع شمال",
-    "notes": "فاکتور با پرداخت جزئی",
-    "date": "2025-12-10T14:00:00Z",
-    "Status": 2,
-    "totalAmount": 450000.0,
-    "paidAmount": 150000.0,
+final List<Map<String, Object>> fakeJsonList =
+<Map<String, Object>>[
+  <String, Object>{
+    "id": 1,
+    "sellerId": "seller_001",
+    "SellerName": "شرکت تامین قطعات پلیمری",
+    "notes": "صورتحساب خرید فصل اول 1403",
+    "date": 1735070400000,
+    "Status": 1,
+    "totalAmount": 75000000.0,
+    "paidAmount": 50000000.0,
     "paymentStatus": "partial",
     "deliveryStatus": "shipped",
     "isSettled": false,
-    "Deliveries": [
-      {"id": 202, "date": 1733851200000, "count": 1, "totalWeight": 30.0},
-    ],
-    "Items": [
-      {"id": 3, "name": "پمپ آب صنعتی", "quantity": 1, "price": 300000.0},
-      {"id": 4, "name": "فیلتر", "quantity": 3, "price": 50000.0},
-    ],
-    "Payments": [
-      {
-        "id": 5002,
-        "date": 1733854800000,
-        "method": "transfer",
-        "sellerId":' 2',
-        "sellerName": "صنایع شمال",
-        "status": 1,
-        "totalAmount": 450000.0,
-        "paidAmount": 150000.0,
-        "paymentStatus": "partial",
-        "deliveryStatus": "shipped",
-        "isSettled": false,
-        "notes": "پیش‌پرداخت از طریق انتقال",
-        "Deliveries": [],
-        "Items": [],
-        "Payments": [
-          {
-            "id": 5010,
-            "date": 1733854800000,
-            "method": "transfer",
-            "sellerId": '2',
-            "sellerName": "صنایع شمال",
-            "status": 1,
-            "totalAmount": 150000.0,
-            "paidAmount": 150000.0,
-            "paymentStatus": "paid",
-            "deliveryStatus": "pending",
-            "isSettled": true,
-            "notes": "تراکنش فرعی",
-            "Deliveries": [],
-            "Items": [],
-            "Payments": [],
-          },
-        ],
+    "Deliveries": <Map<String, num>>[
+      <String, num>{
+        "id": 101,
+        "date": 1735156800000,
+        "count": 1500,
+        "totalWeight": 12500.5
       },
+      <String, num>{
+        "id": 102,
+        "date": 1735243200000,
+        "count": 800,
+        "totalWeight": 6800.75
+      }
     ],
+    "Items": <Map<String, Object>>[
+      <String, Object>{
+        "id": 201,
+        "name": "لوله PVC فشار قوی سایز 20",
+        "quantity": 5000,
+        "price": 8500.0
+      },
+      <String, Object>{
+        "id": 202,
+        "name": "لوله PVC فشار قوی سایز 25",
+        "quantity": 3000,
+        "price": 12500.0
+      },
+      <String, Object>{
+        "id": 203,
+        "name": "اتصال سه راهی 20*20*20",
+        "quantity": 2000,
+        "price": 3500.0
+      }
+    ],
+    "Payments": <Map<String, Object>>[
+      <String, Object>{
+        "id": 301,
+        "date": 1735070400000,
+        "method": "کارت به کارت",
+        "sellerId": "seller_001",
+        "sellerName": "شرکت تامین قطعات پلیمری",
+        "status": 1,
+        "totalAmount": 30000000.0,
+        "paidAmount": 30000000.0,
+        "paymentStatus": "paid",
+        "deliveryStatus": "pending",
+        "isSettled": true,
+        "notes": "پیش پرداخت اولیه",
+        "Deliveries": <dynamic>[],
+        "Items": <dynamic>[],
+        "Payments": <dynamic>[]
+      },
+      <String, Object>{
+        "id": 302,
+        "date": 1735339200000,
+        "method": "چک 3 ماهه",
+        "sellerId": "seller_001",
+        "sellerName": "شرکت تامین قطعات پلیمری",
+        "status": 0,
+        "totalAmount": 45000000.0,
+        "paidAmount": 20000000.0,
+        "paymentStatus": "partial",
+        "deliveryStatus": "pending",
+        "isSettled": false,
+        "notes": "چک باقیمانده",
+        "Deliveries": <dynamic>[],
+        "Items": <dynamic>[],
+        "Payments": <dynamic>[]
+      }
+    ]
   },
-
-  {
-    "id": 1003,
-    "sellerId": "S-003",
-    "SellerName": "پخش امید",
-    "notes": "فاکتور جدید - پرداخت نشده",
-    "date": "2025-12-18T09:00:00Z",
+  <String, Object>{
+    "id": 2,
+    "sellerId": "seller_002",
+    "SellerName": "کارخانه تولید واشرهای صنعتی",
+    "notes": "خرید عمده واشرهای آب بندی",
+    "date": 1735425600000,
+    "Status": 2,
+    "totalAmount": 42000000.0,
+    "paidAmount": 42000000.0,
+    "paymentStatus": "paid",
+    "deliveryStatus": "delivered",
+    "isSettled": true,
+    "Deliveries": <Map<String, num>>[
+      <String, num>{
+        "id": 103,
+        "date": 1735512000000,
+        "count": 25000,
+        "totalWeight": 1250.0
+      }
+    ],
+    "Items": <Map<String, Object>>[
+      <String, Object>{
+        "id": 204,
+        "name": "واشر لاستیکی سایز 1/2 اینچ",
+        "quantity": 10000,
+        "price": 2500.0
+      },
+      <String, Object>{
+        "id": 205,
+        "name": "واشر لاستیکی سایز 3/4 اینچ",
+        "quantity": 8000,
+        "price": 2800.0
+      },
+      <String, Object>{
+        "id": 206,
+        "name": "واشر لاستیکی سایز 1 اینچ",
+        "quantity": 7000,
+        "price": 3200.0
+      }
+    ],
+    "Payments": <Map<String, Object>>[
+      <String, Object>{
+        "id": 303,
+        "date": 1735425600000,
+        "method": "نقدی",
+        "sellerId": "seller_002",
+        "sellerName": "کارخانه تولید واشرهای صنعتی",
+        "status": 2,
+        "totalAmount": 42000000.0,
+        "paidAmount": 42000000.0,
+        "paymentStatus": "paid",
+        "deliveryStatus": "delivered",
+        "isSettled": true,
+        "notes": "پرداخت کامل نقدی",
+        "Deliveries": <dynamic>[],
+        "Items": <dynamic>[],
+        "Payments": <dynamic>[]
+      }
+    ]
+  },
+  <String, Object>{
+    "id": 3,
+    "sellerId": "seller_003",
+    "SellerName": "واحد تولیدی شیرآلات صنعتی",
+    "notes": "",
+    "date": 1735598400000,
     "Status": 0,
-    "totalAmount": 78000.0,
+    "totalAmount": 18500000.0,
     "paidAmount": 0.0,
     "paymentStatus": "unpaid",
     "deliveryStatus": "pending",
     "isSettled": false,
-    "Deliveries": [
-      {"id": 203, "date": 1734450000000, "count": 0, "totalWeight": 0.0},
+    "Deliveries": <dynamic>[],
+    "Items": <Map<String, Object>>[
+      <String, Object>{
+        "id": 207,
+        "name": "شیر توپی تمام برنجی 1 اینچ",
+        "quantity": 500,
+        "price": 25000.0
+      },
+      <String, Object>{
+        "id": 208,
+        "name": "شیر توپی تمام برنجی 1/2 اینچ",
+        "quantity": 800,
+        "price": 18000.0
+      }
     ],
-    "Items": [
-      {"id": 5, "name": "قوطی رنگ 1 لیتری", "quantity": 12, "price": 6500.0},
-    ],
-    "Payments": [],
-  },
+    "Payments": <dynamic>[]
+  }
 ];

@@ -29,5 +29,5 @@ class MedicalRecord extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, date, diagnosis];
+  List<Object?> get props => <Object?>[id, date, diagnosis];
 }

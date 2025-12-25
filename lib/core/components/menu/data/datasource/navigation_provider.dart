@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:khatoon_container/core/components/menu/domain/entities/menu_item.dart';
 
@@ -8,7 +6,7 @@ class NavigationProvider extends ChangeNotifier {
 
   int get selectedPageIndex => _selectedPageIndex;
 
-  final List<MenuItem> menuItems = [
+  final List<MenuItem> menuItems = <MenuItem>[
     MenuItem(
       label: 'Counters',
       icon:const Icon(Icons.list) ,
@@ -21,7 +19,7 @@ class NavigationProvider extends ChangeNotifier {
 
       id: 'Management',
       pageIndex: -1,
-      children: [
+      children: <MenuItem>[
         MenuItem(label: 'Users', icon:  const Icon(Icons.person) ,  pageIndex: 1, id: 'Users'),
         MenuItem(
           label: 'Reports',

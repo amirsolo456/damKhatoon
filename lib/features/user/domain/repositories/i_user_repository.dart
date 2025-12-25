@@ -1,5 +1,4 @@
 import 'package:khatoon_container/features/user/data/models/user_model/user_model.dart';
-import 'package:khatoon_container/features/user/domain/entities/user_dto/user.dart';
 
 
 

@@ -11,7 +11,7 @@ import 'package:khatoon_container/features/purchase/presentation/pages/purchase_
 
 class AppNotifier extends ChangeNotifier {
   // Navigation State
-  final List<MenuItem> _MenuItems = [
+  final List<MenuItem> _MenuItems = <MenuItem>[
     MenuItem(
       id: 'home',
       pageIndex: 0,
@@ -24,7 +24,7 @@ class AppNotifier extends ChangeNotifier {
       id: 'products',
       label: 'محصولات',
       icon:const Icon(IconData(fontFamily: 'assets/user_profile.png',0xe800 )),
-      children: [
+      children: <MenuItem>[
         MenuItem(
           pageIndex: 0,
           id: 'all_products',
@@ -53,7 +53,7 @@ class AppNotifier extends ChangeNotifier {
       id: 'orders',
       label: 'سفارشات',
       icon:const Icon(IconData(fontFamily: 'assets/user_profile.png',0xe600,fontPackage:'assets/user_profile.png' ,matchTextDirection: true ),size: 16,),
-      children: [
+      children: <MenuItem>[
         MenuItem(
           pageIndex: 0,
           id: 'pending_orders',
@@ -97,7 +97,7 @@ class AppNotifier extends ChangeNotifier {
       id: 'settings',
       label: 'تنظیمات',
       icon:const Icon(IconData(fontFamily: 'assets/user_profile.png',0xe800 )),
-      children: [
+      children: <MenuItem>[
         MenuItem(
           pageIndex: 0,
           id: 'profile',
@@ -162,7 +162,7 @@ class AppNotifier extends ChangeNotifier {
     );
   }
   // Navigation State
-  Map<String, bool> _expandedStates = {};
+  final Map<String, bool> _expandedStates = <String, bool>{};
   String? _selectedItemId;
   String? _currentRoute;
   bool _sidebarCollapsed = false;
@@ -229,10 +229,10 @@ class AppNotifier extends ChangeNotifier {
   // Helper methods
   MenuItem? findItemById(String id) {
     MenuItem? findInList(List<MenuItem> items) {
-      for (var item in items) {
+      for (MenuItem item in items) {
         if (item.id == id) return item;
         if (item.children != null) {
-          final found = findInList(item.children!);
+          final MenuItem? found = findInList(item.children!);
           if (found != null) return found;
         }
       }
@@ -258,7 +258,7 @@ class AppNotifier extends ChangeNotifier {
   }
 
   void selectItem(String itemId, {bool closeDrawer = true}) {
-    final item = findItemById(itemId);
+    final MenuItem? item = findItemById(itemId);
     if (item == null) return;
 
     _selectedItemId = itemId;
@@ -284,7 +284,7 @@ class AppNotifier extends ChangeNotifier {
   Widget? getCurrentPage(BuildContext context) {
     if (_selectedItemId == null) return const HomePage();
 
-    final item = findItemById(_selectedItemId!);
+    final MenuItem? item = findItemById(_selectedItemId!);
     if (item == null) return const HomePage();
 
     // اولویت با pageBuilder است

@@ -6,11 +6,11 @@ part 'delivery_model.g.dart';
 @JsonSerializable()
 class DeliveryModel extends Delivery {
   const DeliveryModel({
-    required int date,
-    required int count,
-    required int id,
-    required double totalWeight,
-  }) : super(id: id, date: date, count: count, totalWeight: totalWeight);
+    required super.date,
+    required super.count,
+    required super.id,
+    required super.totalWeight,
+  });
 
   static int dateToJson(int value) => value;
 
@@ -19,5 +19,6 @@ class DeliveryModel extends Delivery {
   factory DeliveryModel.fromJson(Map<String, dynamic> json) =>
       _$DeliveryModelFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$DeliveryModelToJson(this);
 }

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>X:\damKhatoon\build-di\windows\x64\x64\Profile\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>X:\damKhatoon\build-di\windows\x64\flutter\x64\Profile\flutter_assemble</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>X:\damKhatoon\build-di\windows\x64\plugins\isar_flutter_libs\Profile\isar_flutter_libs_plugin.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>X:\damKhatoon\build-di\windows\x64\plugins\sqlite3_flutter_libs\Profile\sqlite3.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>X:\damKhatoon\build-di\windows\x64\plugins\sqlite3_flutter_libs\Profile\sqlite3_flutter_libs_plugin.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>X:\damKhatoon\build-di\windows\x64\runner\Profile\khatoon_container.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>X:\damKhatoon\build-di\windows\x64\x64\Profile\ALL_BUILD</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

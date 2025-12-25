@@ -22,7 +22,7 @@ class UserLocalDataSource implements IUserRepository {
   @override
   Future<UserModel?> getUserById(int id) async {
     return box.values.firstWhere(
-      (user) => user.id == id,
+      (UserModel user) => user.id == id,
       orElse: () => UserModel(),
     );
   }
@@ -43,7 +43,7 @@ class UserLocalDataSource implements IUserRepository {
   }
 
   Future<UserModel?> getUserByIdOptimized(int id) async {
-    final index = box.values.toList().indexWhere((user) => user.id == id);
+    final int index = box.values.toList().indexWhere((UserModel user) => user.id == id);
     return index != -1 ? box.getAt(index) : null;
   }
 }

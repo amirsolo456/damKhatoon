@@ -36,5 +36,5 @@ class Delivery extends Equatable {
   Map<String, dynamic> toJson() => _$DeliveryToJson(this);
 
   @override
-  List<Object?> get props => [id, date, count, totalWeight];
+  List<Object?> get props => <Object?>[id, date, count, totalWeight];
 }

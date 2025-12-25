@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:khatoon_container/app_notifier.dart';
 import 'package:khatoon_container/core/components/app_bar/main_app_bar.dart';
 import 'package:khatoon_container/core/components/menu/presentation/widgets/menu.dart';
 import 'package:khatoon_container/core/components/pages/home/presentation/home_page.dart';
 import 'package:khatoon_container/core/components/pages/sign_in/presentation/sign_in_page.dart';
-import 'package:khatoon_container/features/user/data/data_sources/user_local_data_source.dart';
 import 'package:khatoon_container/injection_container.dart';
 import 'package:provider/provider.dart';
 
@@ -20,21 +18,21 @@ void main() async {
   runApp(
       ChangeNotifierProvider(
       lazy: false,
-      create: (context) => AppNotifier(),
+      create: (BuildContext context) => AppNotifier(),
       child: Consumer<AppNotifier>(
-        builder: (context, notifier, child) {
+        builder: (BuildContext context, AppNotifier notifier, Widget? child) {
           return MaterialApp(
             title: 'App with Global Notifier',
             debugShowCheckedModeBanner: false,
-            supportedLocales: [const Locale('fa'), const Locale('en')],
+            supportedLocales: <Locale>[const Locale('fa'), const Locale('en')],
             locale: const Locale('fa'),
-            localizationsDelegates: [
+            localizationsDelegates: <LocalizationsDelegate<dynamic>>[
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            localeResolutionCallback: (locale, supportedLocales) {
-              for (var supportedLocale in supportedLocales) {
+            localeResolutionCallback: (Locale? locale, Iterable<Locale> supportedLocales) {
+              for (Locale supportedLocale in supportedLocales) {
                 if (supportedLocale.languageCode == locale?.languageCode) {
                   return supportedLocale;
                 }
@@ -44,7 +42,6 @@ void main() async {
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
                 seedColor: notifier.themeConfig.primaryColor,
-                brightness: Brightness.light,
               ),
               useMaterial3: true,
               fontFamily: 'Vazir',
@@ -71,8 +68,8 @@ class MainAppScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<AppNotifier>(context);
-    final isRTL = Localizations.localeOf(context).languageCode == 'fa';
+    final AppNotifier notifier = Provider.of<AppNotifier>(context);
+    final bool isRTL = Localizations.localeOf(context).languageCode == 'fa';
 
     return Directionality(
       textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
@@ -85,19 +82,19 @@ class MainAppScreen extends StatelessWidget {
                 child: SafeArea(child: MainAppBar()),
               ),
               body: Row(
-                children: [
+                children: <Widget>[
                   // Navigation Bar
                   const ExpandableMenu(isRail: true),
                   // Main Content
                   Expanded(
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         if (notifier.errorMessage != null)
                           Container(
                             color: Colors.red.withAlpha(1),
                             padding: const EdgeInsets.all(16),
                             child: Row(
-                              children: [
+                              children: <Widget>[
                                 const Icon(Icons.error, color: Colors.red),
                                 const SizedBox(width: 8),
                                 Expanded(child: Text(notifier.errorMessage!)),
@@ -110,7 +107,7 @@ class MainAppScreen extends StatelessWidget {
                           ),
                         Expanded(
                           child: Consumer<AppNotifier>(
-                            builder: (context, notifier, child) {
+                            builder: (BuildContext context, AppNotifier notifier, Widget? child) {
                               return notifier.getCurrentPage(context) ??
                                   const HomePage();
                             },

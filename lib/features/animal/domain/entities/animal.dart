@@ -93,11 +93,11 @@ class Animal extends Equatable {
     required this.reproductionStatus,
     this.lastCheckupDate,
     this.healthNotes,
-    this.vaccinations = const [],
-    this.medicalRecords = const [],
+    this.vaccinations = const <VaccinationRecord>[],
+    this.medicalRecords = const <MedicalRecord>[],
     this.fatherId,
     this.motherId,
-    this.offspringIds = const [],
+    this.offspringIds = const <String>[],
     this.lastMatingDate,
     this.expectedDeliveryDate,
     this.pregnanciesCount,
@@ -108,15 +108,15 @@ class Animal extends Equatable {
     this.lactationDays,
     this.dietType,
     this.dailyFeedAmount,
-    this.feedRecords = const [],
+    this.feedRecords = const <FeedRecord>[],
     this.barnId,
     this.penId,
     this.location,
     this.estimatedValue,
     this.insuranceExpiry,
     this.insuranceAmount,
-    this.imageUrls = const [],
-    this.documentUrls = const [],
+    this.imageUrls = const <String>[],
+    this.documentUrls = const <String>[],
     this.notes,
     this.microchipNumber,
     this.rfidTag,
@@ -130,7 +130,7 @@ class Animal extends Equatable {
   // محاسبات
   int? get ageInMonths {
     if (birthDate == null) return null;
-    final now = DateTime.now();
+    final DateTime now = DateTime.now();
     return ((now.difference(birthDate!).inDays) / 30).floor();
   }
 
@@ -140,12 +140,12 @@ class Animal extends Equatable {
   }
 
   String? get ageDescription {
-    final years = ageInYears;
-    final months = ageInMonths;
+    final int? years = ageInYears;
+    final int? months = ageInMonths;
     if (years == null || months == null) return null;
 
     if (years > 0) {
-      final remainingMonths = months % 12;
+      final int remainingMonths = months % 12;
       if (remainingMonths > 0) {
         return '$years سال و $remainingMonths ماه';
       }
@@ -162,22 +162,22 @@ class Animal extends Equatable {
   // آخرین واکسیناسیون
   VaccinationRecord? get lastVaccination {
     if (vaccinations.isEmpty) return null;
-    vaccinations.sort((a, b) => b.date.compareTo(a.date));
+    vaccinations.sort((VaccinationRecord a, VaccinationRecord b) => b.date.compareTo(a.date));
     return vaccinations.first;
   }
 
   // آیا واکسیناسیون نیاز دارد؟
   bool get needsVaccination {
-    final lastVaccination = this.lastVaccination;
+    final VaccinationRecord? lastVaccination = this.lastVaccination;
     if (lastVaccination == null) return true;
-    final nextDueDate = lastVaccination.date.add(
+    final DateTime nextDueDate = lastVaccination.date.add(
       Duration(days: lastVaccination.nextVaccinationDays),
     );
     return DateTime.now().isAfter(nextDueDate);
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
     id,
     tagNumber,
     name,

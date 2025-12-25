@@ -28,5 +28,5 @@ class ReproductionRecord extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, date, type];
+  List<Object?> get props => <Object?>[id, date, type];
 }

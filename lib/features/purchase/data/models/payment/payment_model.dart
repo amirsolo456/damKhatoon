@@ -54,13 +54,13 @@ class PaymentModel extends Payment {
   @JsonKey(name: 'notes', defaultValue: '')
   final String notes;
 
-  @JsonKey(name: 'Deliveries', defaultValue: [])
+  @JsonKey(name: 'Deliveries', defaultValue: <dynamic>[])
   final List<DeliveryModel> deliveryModels;
 
-  @JsonKey(name: 'Items', defaultValue: [])
+  @JsonKey(name: 'Items', defaultValue: <dynamic>[])
   final List<PurchaseItemModel> purchaseItemModels;
 
-  @JsonKey(name: 'Payments', defaultValue: [])
+  @JsonKey(name: 'Payments', defaultValue: <dynamic>[])
   final List<PaymentModel> paymentModels;
 
   const PaymentModel({

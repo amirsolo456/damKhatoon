@@ -25,7 +25,7 @@ class ApiService<T extends BaseResponse<D>, D, C extends BaseRequest> implements
       baseUrl: 'https://api.damdari.com/api/v1',
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
-      headers: {
+      headers: <String, dynamic>{
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
@@ -40,25 +40,25 @@ class ApiService<T extends BaseResponse<D>, D, C extends BaseRequest> implements
 
   @override
   Future<T> get(String path, {Map<String, dynamic>? queryParameters, required T Function(Map<String, dynamic>) fromJson}) async {
-    final response = await dio.get(path, queryParameters: queryParameters);
+    final Response<dynamic> response = await dio.get(path, queryParameters: queryParameters);
     return fromJson(response.data);
   }
 
   @override
   Future<T> post(String path, {C? data, required T Function(Map<String, dynamic>) fromJson}) async {
-    final response = await dio.post(path, data: data?.toJson());
+    final Response<dynamic> response = await dio.post(path, data: data?.toJson());
     return fromJson(response.data);
   }
 
   @override
   Future<T> put(String path, {C? data, required T Function(Map<String, dynamic>) fromJson}) async {
-    final response = await dio.put(path, data: data?.toJson());
+    final Response<dynamic> response = await dio.put(path, data: data?.toJson());
     return fromJson(response.data);
   }
 
   @override
   Future<T> delete(String path, {Map<String, dynamic>? queryParameters, required T Function(Map<String, dynamic>) fromJson}) async {
-    final response = await dio.delete(path, queryParameters: queryParameters);
+    final Response<dynamic> response = await dio.delete(path, queryParameters: queryParameters);
     return fromJson(response.data);
   }
 
@@ -70,7 +70,7 @@ class ApiService<T extends BaseResponse<D>, D, C extends BaseRequest> implements
     Map<String, dynamic>? queryParameters,
     required T Function(Map<String, dynamic>) fromJson,
   }) async {
-    final response = await dio.request(
+    final Response<dynamic> response = await dio.request(
       path,
       data: data,
       queryParameters: queryParameters,
@@ -96,8 +96,8 @@ class ApiService<T extends BaseResponse<D>, D, C extends BaseRequest> implements
 class AuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('access_token');
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('access_token');
 
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -110,7 +110,7 @@ class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      final prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.clear();
       // اگر از route management استفاده می‌کنید، اینجا می‌توانید هدایت به صفحه لاگین را انجام دهید.
     }

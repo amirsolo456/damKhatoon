@@ -1,9 +1,6 @@
 import 'package:khatoon_container/features/purchase/data/datasources/purchase_remote_data_source.dart';
-import 'package:khatoon_container/features/purchase/data/models/payment/payment_model.dart';
 import 'package:khatoon_container/features/purchase/data/models/purchase_invoice/purchase_invoice_model.dart';
 import 'package:khatoon_container/features/purchase/data/models/purchase_item/purchase_item_model.dart';
-import 'package:khatoon_container/features/purchase/data/repositories/purchase_repository_impl.dart';
-import 'package:khatoon_container/features/purchase/domain/entities/purchase_invoice.dart';
 
 class CreatePurchaseItemUseCase {
   final PurchaseRemoteDataSource repository;

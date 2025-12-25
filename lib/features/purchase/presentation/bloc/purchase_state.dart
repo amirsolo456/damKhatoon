@@ -10,7 +10,7 @@ abstract class PurchaseState extends Equatable {
   const PurchaseState();
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }
 
 // Initial
@@ -30,7 +30,7 @@ class PurchasesLoadedState extends PurchaseState {
   const PurchasesLoadedState(this.invoices);
 
   @override
-  List<Object> get props => [invoices];
+  List<Object> get props => <Object>[invoices];
 }
 
 class PurchaseByIdLoaded extends PurchaseState {
@@ -39,7 +39,7 @@ class PurchaseByIdLoaded extends PurchaseState {
   const PurchaseByIdLoaded(this.invoice);
 
   @override
-  List<Object> get props => [invoice];
+  List<Object> get props => <Object>[invoice];
 }
 
 class PurchaseItemsLoadedState extends PurchaseState {
@@ -48,7 +48,7 @@ class PurchaseItemsLoadedState extends PurchaseState {
   const PurchaseItemsLoadedState(this.items);
 
   @override
-  List<Object> get props => [items];
+  List<Object> get props => <Object>[items];
 }
 
 class PaymentsLoadedState extends PurchaseState {
@@ -57,7 +57,7 @@ class PaymentsLoadedState extends PurchaseState {
   const PaymentsLoadedState(this.payments);
 
   @override
-  List<Object> get props => [payments];
+  List<Object> get props => <Object>[payments];
 }
 
 class OrdersLoadedState extends PurchaseState {
@@ -66,7 +66,7 @@ class OrdersLoadedState extends PurchaseState {
   const OrdersLoadedState(this.orders);
 
   @override
-  List<Object> get props => [orders];
+  List<Object> get props => <Object>[orders];
 }
 
 class DeliveriesLoadedState extends PurchaseState {
@@ -75,7 +75,7 @@ class DeliveriesLoadedState extends PurchaseState {
   const DeliveriesLoadedState(this.deliveries);
 
   @override
-  List<Object> get props => [deliveries];
+  List<Object> get props => <Object>[deliveries];
 }
 
 // Success States
@@ -85,7 +85,7 @@ class PurchaseCreatedState extends PurchaseState {
   const PurchaseCreatedState(this.purchase);
 
   @override
-  List<Object> get props => [purchase.id];
+  List<Object> get props => <Object>[purchase.id];
 }
 
 class PurchaseUpdatedState extends PurchaseState {
@@ -94,7 +94,7 @@ class PurchaseUpdatedState extends PurchaseState {
   const PurchaseUpdatedState(this.invoice);
 
   @override
-  List<Object> get props => [invoice];
+  List<Object> get props => <Object>[invoice];
 }
 
 class PurchaseDeletedState extends PurchaseState {
@@ -103,7 +103,7 @@ class PurchaseDeletedState extends PurchaseState {
   const PurchaseDeletedState(this.purchase);
 
   @override
-  List<Object> get props => [purchase.id];
+  List<Object> get props => <Object>[purchase.id];
 }
 
 class PurchaseItemCreatedState extends PurchaseState {
@@ -112,7 +112,7 @@ class PurchaseItemCreatedState extends PurchaseState {
   const PurchaseItemCreatedState(this.item);
 
   @override
-  List<Object> get props => [item];
+  List<Object> get props => <Object>[item];
 }
 
 class PurchaseItemUpdatedState extends PurchaseState {
@@ -121,7 +121,7 @@ class PurchaseItemUpdatedState extends PurchaseState {
   const PurchaseItemUpdatedState(this.item);
 
   @override
-  List<Object> get props => [item];
+  List<Object> get props => <Object>[item];
 }
 
 class PurchaseItemDeletedState extends PurchaseState {
@@ -130,7 +130,7 @@ class PurchaseItemDeletedState extends PurchaseState {
   const PurchaseItemDeletedState(this.item);
 
   @override
-  List<Object> get props => [item.id];
+  List<Object> get props => <Object>[item.id];
 }
 
 class PaymentCreatedState extends PurchaseState {
@@ -139,7 +139,7 @@ class PaymentCreatedState extends PurchaseState {
   const PaymentCreatedState(this.payment);
 
   @override
-  List<Object> get props => [payment];
+  List<Object> get props => <Object>[payment];
 }
 
 class PaymentUpdatedState extends PurchaseState {
@@ -148,7 +148,7 @@ class PaymentUpdatedState extends PurchaseState {
   const PaymentUpdatedState(this.payment);
 
   @override
-  List<Object> get props => [payment];
+  List<Object> get props => <Object>[payment];
 }
 
 class PaymentDeletedState extends PurchaseState {
@@ -157,7 +157,7 @@ class PaymentDeletedState extends PurchaseState {
   const PaymentDeletedState(this.payment);
 
   @override
-  List<Object> get props => [payment.id];
+  List<Object> get props => <Object>[payment.id];
 }
 
 class OrderCreatedState extends PurchaseState {
@@ -166,7 +166,7 @@ class OrderCreatedState extends PurchaseState {
   const OrderCreatedState(this.order);
 
   @override
-  List<Object> get props => [order];
+  List<Object> get props => <Object>[order];
 }
 
 class OrderUpdatedState extends PurchaseState {
@@ -175,7 +175,7 @@ class OrderUpdatedState extends PurchaseState {
   const OrderUpdatedState(this.order);
 
   @override
-  List<Object> get props => [order];
+  List<Object> get props => <Object>[order];
 }
 
 class OrderDeletedState extends PurchaseState {
@@ -184,7 +184,7 @@ class OrderDeletedState extends PurchaseState {
   const OrderDeletedState(this.order);
 
   @override
-  List<Object> get props => [order.id];
+  List<Object> get props => <Object>[order.id];
 }
 
 class DeliveryCreatedState extends PurchaseState {
@@ -193,7 +193,7 @@ class DeliveryCreatedState extends PurchaseState {
   const DeliveryCreatedState(this.delivery);
 
   @override
-  List<Object> get props => [delivery];
+  List<Object> get props => <Object>[delivery];
 }
 
 class DeliveryUpdatedState extends PurchaseState {
@@ -202,7 +202,7 @@ class DeliveryUpdatedState extends PurchaseState {
   const DeliveryUpdatedState(this.delivery);
 
   @override
-  List<Object> get props => [delivery];
+  List<Object> get props => <Object>[delivery];
 }
 
 class DeliveryDeletedState extends PurchaseState {
@@ -211,7 +211,7 @@ class DeliveryDeletedState extends PurchaseState {
   const DeliveryDeletedState(this.deliveryId);
 
   @override
-  List<Object> get props => [deliveryId];
+  List<Object> get props => <Object>[deliveryId];
 }
 
 // Error States
@@ -221,5 +221,5 @@ class PurchaseErrorState extends PurchaseState {
   const PurchaseErrorState(this.message);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => <Object>[message];
 }

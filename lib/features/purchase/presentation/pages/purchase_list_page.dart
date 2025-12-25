@@ -1,7 +1,6 @@
 // purchase_list_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:khatoon_container/app_notifier.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_bloc.dart';
 import 'package:khatoon_container/features/purchase/presentation/bloc/purchase_event.dart';
@@ -15,9 +14,9 @@ class PurchaseListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<AppNotifier>(context);
+    final AppNotifier notifier = Provider.of<AppNotifier>(context);
     return BlocProvider(
-       create: (context) => sl<PurchaseBloc>()..add(LoadPurchasesEvent()),
+       create: (BuildContext context) => sl<PurchaseBloc>()..add(LoadPurchasesEvent()),
 
       // create: (context) {
       //   final bloc = sl<PurchaseBloc>();
@@ -32,7 +31,7 @@ class PurchaseListPage extends StatelessWidget {
             Navigator.push(
               context,
                MaterialPageRoute(
-                builder: (context) => const CreatePurchasePage(),
+                builder: (BuildContext context) => const CreatePurchasePage(),
               ),
             );
           },
